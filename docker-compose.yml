@@ -1,0 +1,83 @@
+version: '3'
+services:
+
+  #PHP Service
+  referral_app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    image: digitalocean.com/php
+    container_name: referral_app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - /usr/share/fonts/:/usr/share/fonts/
+      - /etc/ImageMagick-6/:/etc/ImageMagick-6/
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    links:
+      - referral_redis
+    networks:
+      - referral-app-network
+
+  #Nginx Service
+  referral_webserver:
+    image: nginx:alpine
+    container_name: referral_webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - referral-app-network
+
+  #MySQL Service
+  referral_db:
+    image: mysql:5.7.22
+    container_name: referral_db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: referral
+      MYSQL_ROOT_PASSWORD: password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - referral-app-network
+
+  #Redis Service
+  referral_redis:
+    container_name: referral_redis
+    image: redis:latest
+    restart: always
+    command: redis-server
+    volumes:
+      - redis-data:/data:rw
+    ports:
+      - "6379:6379"
+    networks:
+      - referral-app-network
+
+#Docker Networks
+networks:
+  referral-app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  redis-data:
+  dbdata:
+    driver: local
