@@ -12,8 +12,6 @@ use Illuminate\Routing\Redirector;
 class DashboardController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
      * @return void
      */
     public function __construct()
@@ -22,8 +20,6 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function dashboard()
@@ -36,8 +32,6 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function create_link_page()
@@ -46,19 +40,38 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
      * @param Request $request
      * @return Application|RedirectResponse|Redirector|void
      */
     public function create_link(Request $request)
     {
+        $label = $request->get('label', '');
+        $link_label = $label ? $label : rand(0, 100) . time() . rand(0, 100);
         ReferrerLink::create([
-            'link' => config('app.url') . '/invite/' . rand(0, 100) . time() . rand(0, 100),
-            'caption' => $request->get('caption'),
+            'link' => config('app.url') . '/invite/' . $link_label,
+            'label' => $label,
+            'caption' => $request->get('caption', ''),
             'count' => 0,
             'uniq_count' => 0,
         ]);
+
+        return redirect('dashboard');
+    }
+
+    /**
+     * @param Request $request
+     * @param int $link_id
+     * @return Application|RedirectResponse|Redirector|void
+     */
+    public function delete_link(
+        Request $request,
+        int $link_id
+    )
+    {
+        $link = ReferrerLink::find($link_id);
+        if ($link) {
+            $link->delete();
+        }
 
         return redirect('dashboard');
     }

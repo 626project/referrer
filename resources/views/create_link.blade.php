@@ -20,7 +20,16 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="articles" role="tabpanel" aria-labelledby="articles-tab">
                                 <div class="form-group">
-                                    <label for="name">Caption</label>
+                                    <label for="label">Label</label>
+                                    <input type="text" class="form-control" id="label" name="label" placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="articles" role="tabpanel" aria-labelledby="articles-tab">
+                                <div class="form-group">
+                                    <label for="caption">Caption</label>
                                     <input type="text" class="form-control" id="caption" name="caption" placeholder="" value="">
                                 </div>
                             </div>

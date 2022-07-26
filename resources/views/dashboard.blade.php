@@ -17,8 +17,10 @@
                                 <tr>
                                     <th>id</th>
                                     <th>link</th>
+                                    <th>caption</th>
                                     <th>count</th>
                                     <th>uniq count</th>
+                                    <th>actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -31,10 +33,16 @@
                                             <a href="{{$referrer_link['link']}}">{{$referrer_link['link']}}</a>
                                         </td>
                                         <td>
+                                            {{$referrer_link['caption']}}
+                                        </td>
+                                        <td>
                                             {{$referrer_link['count']}}
                                         </td>
                                         <td>
                                             {{$referrer_link['uniq_count']}}
+                                        </td>
+                                        <td>
+                                            <a href="/links/{{$referrer_link['id']}}/delete">delete</a>
                                         </td>
                                     </tr>
                                 @endforeach
