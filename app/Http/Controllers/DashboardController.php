@@ -50,7 +50,7 @@ class DashboardController extends Controller
         ReferrerLink::create([
             'link' => config('app.url') . '/invite/' . $link_label,
             'label' => $label,
-            'caption' => $request->get('caption', ''),
+            'caption' => $request->get('caption', '') ?? '',
             'count' => 0,
             'uniq_count' => 0,
         ]);

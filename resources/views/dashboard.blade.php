@@ -6,8 +6,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Referrer links
-                    <a href="/create-link" class="float-md-right btn btn-outline-info">create link</a>
+                    Реферальные ссылки
+                    <a href="/create-link" class="float-md-right btn btn-outline-info">добавить ссылку</a>
                 </div>
                 <div class="card-body">
                     @if(count($referrer_links))
@@ -16,11 +16,11 @@
                                 <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>link</th>
-                                    <th>caption</th>
-                                    <th>count</th>
-                                    <th>uniq count</th>
-                                    <th>actions</th>
+                                    <th>ссылка</th>
+                                    <th>описание</th>
+                                    <th>кол-во</th>
+                                    <th>кол-во уник.</th>
+                                    <th>действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -42,7 +42,7 @@
                                             {{$referrer_link['uniq_count']}}
                                         </td>
                                         <td>
-                                            <a href="/links/{{$referrer_link['id']}}/delete">delete</a>
+                                            <a href="/links/{{$referrer_link['id']}}/delete">удалить</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -50,7 +50,7 @@
                             </table>
                         </div>
                     @else
-                        empty data
+                        данные отсутствуют
                     @endif
                 </div>
             </div>
@@ -65,7 +65,32 @@
 
         $(document).ready(function () {
             var list_table = $('#list_table');
-            list_table.DataTable();
+            list_table.DataTable( {
+                "language": {
+                    "sProcessing":    "Процесс ...",
+                    "sLengthMenu":    "Показать записи _MENU_",
+                    "sZeroRecords":   "По выбранным параметрам результатов не найдено",
+                    "sEmptyTable":    "Данные отсутствуют в таблице",
+                    "sInfo":          "Показаны записи с _START_ по _END_ из _TOTAL_",
+                    "sInfoEmpty":     "Показано с 0 по 0 из 0 записей",
+                    "sInfoFiltered":  "отфильтровано из _MAX_ записей",
+                    "sInfoPostFix":   "",
+                    "sSearch":        "Поиск",
+                    "sUrl":           "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Загрузка ...",
+                    "oPaginate": {
+                        "sFirst":       "Первый",
+                        "sLast":        "Прошлой",
+                        "sNext":        "назад",
+                        "sPrevious":    "вперед"
+                    },
+                    "oAria": {
+                        "sSortAscending":  "Сортировать по возрастанию",
+                        "sSortDescending": "Сортировать по убыванию"
+                    }
+                },
+            });
             list_table.removeClass('invisible');
         });
 
