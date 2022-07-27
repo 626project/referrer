@@ -13,7 +13,7 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/invite/{code}', 'DashboardController@invite')->name('dashboard.invite');
+Route::get('/invite/{code}', 'TgBotController@invite')->name('tg_bot.invite');
 Route::get('/tg', 'TgBotController@index')->name('tg_bot');
 
 Route::group(['middleware' => ['auth']], function () {

@@ -75,36 +75,4 @@ class DashboardController extends Controller
 
         return redirect('dashboard');
     }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @param string $code
-     * @return Application|RedirectResponse|Redirector|void
-     */
-    public function invite(string $code)
-    {
-        $referrer_link = ReferrerLink::where([
-            'link' => config('app.url') . '/invite/' . $code,
-        ])->first();
-        if (!$referrer_link) {
-            return redirect('login');
-        }
-        $referrer_link->increment('count');
-        $ip = $_SERVER['REMOTE_ADDR'];
-        $referrer_uniq_redirect_count = ReferrerRedirect::where([
-            'ip' => $ip,
-            'referrer_link_id' => $referrer_link->id,
-        ])->count();
-        if ($referrer_uniq_redirect_count === 0) {
-            $referrer_link->increment('uniq_count');
-        }
-        ReferrerRedirect::create([
-            'ip' => $ip,
-            'referrer_link_id' => $referrer_link->id,
-        ]);
-
-//        return redirect('http://t.me/Info24PlatformBot');
-        return redirect('http://t.me/AlternativeAssistance');
-    }
 }
