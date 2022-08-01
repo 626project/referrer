@@ -36,12 +36,13 @@ class TgBotController extends Controller
         define('TOKEN', self::TOKEN);
 
         $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']), 'utf-8');
-        info('___ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false)));
+        info('__ : ' . print_r(mb_detect_encoding($message), true));
+        info('___ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false), true));
         info('$message 1: ' . print_r($message, 1));
         info('$message 2: ' . print_r(utf8_decode($message), 1));
         $message = mb_convert_encoding($message, "UTF-8");
         info('$message 3: ' . print_r(utf8_decode($message), 1));
-        info('____ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false)));
+        info('____ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false), true));
 
         switch ($message) {
             case '/start':
