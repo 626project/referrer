@@ -40,6 +40,7 @@ class TgBotController extends Controller
         info('$message 2: ' . print_r(utf8_decode($message), 1));
         $message = mb_convert_encoding($message, "UTF-8");
         info('$message 3: ' . print_r(utf8_decode($message), 1));
+        info('__ : ' . print_r(mb_detect_encoding($message)));
 
         switch ($message) {
             case '/start':
