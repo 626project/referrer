@@ -14,7 +14,7 @@ Route::get('/', function () {
 });
 
 Route::get('/invite/{code}', 'TgBotController@invite')->name('tg_bot.invite');
-Route::get('/tg', 'TgBotController@index')->name('tg_bot');
+Route::post('/tg', 'TgBotController@index')->name('tg_bot');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@dashboard')->name('dashboard');
