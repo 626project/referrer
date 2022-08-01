@@ -242,6 +242,8 @@ VIP тариф, куда входит персональный менеджер,
     private function sendTelegram($method, $data, $headers = [])
     {
         $curl = curl_init();
+        info('$method: ' . print_r($method, true));//fixme
+        info('data: ' . print_r($data, true));//fixme
         curl_setopt_array($curl, [
             CURLOPT_POST => 1,
             CURLOPT_HEADER => 0,
