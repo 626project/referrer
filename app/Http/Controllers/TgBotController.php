@@ -32,7 +32,7 @@ class TgBotController extends Controller
         info('input data: ' . print_r($data, 1));
 
         if (isset($data['callback_query'])) {
-            $chat_id = $data['callback_query']['chat'] ['id'];
+            $chat_id = $data['callback_query']['message']['chat']['id'];
             $data = isset($data['callback_query']['data']) ? json_decode($data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
         } else {
