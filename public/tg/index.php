@@ -34,8 +34,6 @@ file_put_contents(__DIR__ . '/message.txt', print_r($data, true));
 
 $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
 
-define('TOKEN', TOKEN);
-
 $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']), 'utf-8');
 
 $method = 'sendMessage';
@@ -235,5 +233,5 @@ VIP тариф, куда входит персональный менеджер,
         ];
 }
 
-$send_data['chat_id'] = $data['chat'] ['id'];
+$send_data['chat_id'] = 316341641;//$data['chat'] ['id'];
 $res = sendTelegram($method, $send_data);
