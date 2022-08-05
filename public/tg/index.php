@@ -1,9 +1,5 @@
 <?php
 
-use Telegram\Bot\Api;
-
-require '../../vendor/autoload.php';
-
 const TOKEN = '5402169870:AAGd1B4gqLVz_1F6pLWVjh5fBVXuOadRqgw';
 
 define( 'CHAT_ID', '316341641' ); // @name_chat
@@ -23,8 +19,6 @@ $data = json_decode(file_get_contents('php://input'), TRUE);
 info('input data: ' . print_r($data, 1));
 
 $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
-
-define('TOKEN', self::TOKEN);
 
 $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']));
 
