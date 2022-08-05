@@ -15,8 +15,6 @@ function request($method, $params = array()) {
     return json_decode(file_get_contents($url), JSON_OBJECT_AS_ARRAY);
 }
 $data = json_decode(file_get_contents('php://input'), TRUE);
-// log input data
-info('input data: ' . print_r($data, 1));
 
 $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
 
@@ -52,7 +50,7 @@ switch ($message) {
 
         request("sendMessage", array(
             'chat_id' => CHAT_ID,
-            'text' => "first message",
+            'text' => "second message",
             'disable_web_page_preview' => false,
             'reply_markup' => json_encode(array('inline_keyboard' => $keyboard))
         ));
