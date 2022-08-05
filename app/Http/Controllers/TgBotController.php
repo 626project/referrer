@@ -41,6 +41,7 @@ class TgBotController extends Controller
         }
         $action = mb_strtolower($action);
         info('action: ' . print_r($action, 1));
+        $disable_web_page_preview = false;
 
         switch ($action) {
             case '/start':
@@ -93,7 +94,8 @@ VIP тариф, куда входит персональный менеджер,
             case 'Хочу участвовать в акции':
                 // todo отправить сообщение с данными о пользователе
                 $send_data = [
-                    'html' => '<a href="https://t.me/AlternativeAssistance">Переход на менеджера</a>',
+                    'parse_mode' => 'HTML',
+                    'text' => '<a href="https://t.me/AlternativeAssistance">Переход на менеджера</a>',
                 ];
                 break;
             case 'faq':
@@ -223,7 +225,7 @@ VIP тариф, куда входит персональный менеджер,
                 ];
         }
         $send_data['chat_id'] = $chat_id;
-        $send_data['disable_web_page_preview'] = false;
+        $send_data['disable_web_page_preview'] = $disable_web_page_preview;
 
         self::sendTelegram($send_data);
     }
