@@ -6,7 +6,6 @@ use App\Models\ReferrerLink;
 use App\Models\ReferrerRedirect;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Telegram\Bot\Api;
 
@@ -33,9 +32,11 @@ class TgBotController extends Controller
         info('input data: ' . print_r($data, 1));
 
         if (isset($data['callback_query'])) {
+            $chat_id = $data['callback_query']['chat'] ['id'];
             $data = isset($data['callback_query']['data']) ? json_decode($data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
         } else {
+            $chat_id = $data['message']['chat'] ['id'];
             $action = isset($data['message']['text']) ? $data['message']['text'] : $data['message']['data'];
         }
         $action = mb_strtolower($action);
@@ -221,8 +222,7 @@ VIP тариф, куда входит персональный менеджер,
                     'text' => 'Команда не найдена. Повторите попытку',
                 ];
         }
-
-        $send_data['chat_id'] = $data['chat'] ['id'];
+        $send_data['chat_id'] = $chat_id;
         $send_data['disable_web_page_preview'] = false;
 
         self::sendTelegram($send_data);
