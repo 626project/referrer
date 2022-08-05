@@ -24,6 +24,7 @@ function sendTelegram($method, $data, $headers = [])
 $data = json_decode(file_get_contents('php://input'), TRUE);
 // log input data
 //info('input data: ' . print_r($data, 1));
+file_put_contents(__DIR__ . '/message.txt', print_r($data, true));
 
 $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
 
