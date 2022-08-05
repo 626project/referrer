@@ -19,7 +19,7 @@ file_put_contents(__DIR__ . '/message.txt', print_r($data, true));
 
 if (isset($data['callback_query'])) {
     $data = $data['callback_query'];
-    $data = isset($data['data']) ? json_decode($data['data']) : [];
+    $data = isset($data['data']) ? json_decode($data['data'], true) : [];
     file_put_contents(__DIR__ . '/message2.txt', print_r($data, true));
     $message = mb_strtolower($data['action']);
 } else {
