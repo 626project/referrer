@@ -15,8 +15,10 @@ function request($method, $params = array()) {
     return json_decode(file_get_contents($url), JSON_OBJECT_AS_ARRAY);
 }
 $data = json_decode(file_get_contents('php://input'), TRUE);
+file_put_contents(__DIR__ . '/message.txt', print_r($data, true));
 
 $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
+file_put_contents(__DIR__ . '/message2.txt', print_r($data, true));
 
 $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']));
 
