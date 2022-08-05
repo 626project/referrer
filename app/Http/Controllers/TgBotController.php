@@ -137,6 +137,8 @@ VIP тариф, куда входит персональный менеджер,
                         'inline_keyboard' => [
                             [
                                 ['text' => 'Хочу участвовать в акции', 'callback_data'=>'{"action":"participation in the action"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
@@ -154,6 +156,8 @@ VIP тариф, куда входит персональный менеджер,
                         'inline_keyboard' => [
                             [
                                 ['text' => 'Хочу карту!  Отправить скан паспорта', 'callback_data'=>'{"action":"send a scan of your passport"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
@@ -200,6 +204,8 @@ VIP тариф, куда входит персональный менеджер,
                         'inline_keyboard' => [
                             [
                                 ['text' => 'По условиям оплаты все отлично. Хочу Карту!', 'callback_data'=>'{"action":"want a card"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
@@ -213,6 +219,8 @@ VIP тариф, куда входит персональный менеджер,
                         'inline_keyboard' => [
                             [
                                 ['text' => 'Я не резидент РФ и мне это подходит. Хочу карту!', 'callback_data'=>'{"action":"want a card. not resident"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
@@ -226,6 +234,8 @@ VIP тариф, куда входит персональный менеджер,
                         'inline_keyboard' => [
                             [
                                 ['text' => 'У меня уже есть иин и мне это подходит. Хочу карту!', 'callback_data'=>'{"action":"want a card. have inn"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
