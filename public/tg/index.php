@@ -1,24 +1,30 @@
 <?php
 
+use Telegram\Bot\Api;
+
+require '../../vendor/autoload.php';
+
 const TOKEN = '5402169870:AAGd1B4gqLVz_1F6pLWVjh5fBVXuOadRqgw';
 
 function sendTelegram($method, $data, $headers = [])
 {
-    $curl = curl_init();
-//    info('$method: ' . print_r($method, true));//fixme
-//    info('data: ' . print_r($data, true));//fixme
-    curl_setopt_array($curl, [
-        CURLOPT_POST => 1,
-        CURLOPT_HEADER => 0,
-        CURLOPT_RETURNTRANSFER => 1,
-        CURLOPT_URL => 'https://api.telegram.org/bot' . TOKEN . '/' . $method,
-        CURLOPT_POSTFIELDS => json_encode($data),
-        CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json;charset=utf-8", "charset: utf-8", "charset=utf-8"))
-    ]);
-    $result = curl_exec($curl);
-    curl_close($curl);
-
-    return (json_decode($result, 1) ? json_decode($result, 1) : $result);
+    $telegram = new Api('5402169870:AAGd1B4gqLVz_1F6pLWVjh5fBVXuOadRqgw');
+    $telegram->sendMessage($data);
+//    $curl = curl_init();
+////    info('$method: ' . print_r($method, true));//fixme
+////    info('data: ' . print_r($data, true));//fixme
+//    curl_setopt_array($curl, [
+//        CURLOPT_POST => 1,
+//        CURLOPT_HEADER => 0,
+//        CURLOPT_RETURNTRANSFER => 1,
+//        CURLOPT_URL => 'https://api.telegram.org/bot' . TOKEN . '/' . $method,
+//        CURLOPT_POSTFIELDS => json_encode($data),
+//        CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json;charset=utf-8", "charset: utf-8", "charset=utf-8"))
+//    ]);
+//    $result = curl_exec($curl);
+//    curl_close($curl);
+//
+//    return (json_decode($result, 1) ? json_decode($result, 1) : $result);
 }
 
 $data = json_decode(file_get_contents('php://input'), TRUE);
