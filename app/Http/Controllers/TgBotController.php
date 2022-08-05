@@ -85,7 +85,6 @@ VIP тариф, куда входит персональный менеджер,
             case 'variant 1':
             case 'variant 2':
             case 'call manager':
-            case 'faq':
             case 'which banks':
             case 'i am ready':
             case 'want a card':
