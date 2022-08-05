@@ -8,6 +8,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Telegram\Bot\Api;
 
 class TgBotController extends Controller
 {
@@ -248,21 +249,23 @@ VIP тариф, куда входит персональный менеджер,
      */
     private function sendTelegram($method, $data, $headers = [])
     {
-        $curl = curl_init();
-        info('$method: ' . print_r($method, true));//fixme
-        info('data: ' . print_r($data, true));//fixme
-        curl_setopt_array($curl, [
-            CURLOPT_POST => 1,
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => 'https://api.telegram.org/bot' . self::TOKEN . '/' . $method,
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json"))
-        ]);
-        $result = curl_exec($curl);
-        curl_close($curl);
-
-        return (json_decode($result, 1) ? json_decode($result, 1) : $result);
+        $telegram = new Api(self::TOKEN);
+        $telegram->sendMessage($data);
+//        $curl = curl_init();
+//        info('$method: ' . print_r($method, true));//fixme
+//        info('data: ' . print_r($data, true));//fixme
+//        curl_setopt_array($curl, [
+//            CURLOPT_POST => 1,
+//            CURLOPT_HEADER => 0,
+//            CURLOPT_RETURNTRANSFER => 1,
+//            CURLOPT_URL => 'https://api.telegram.org/bot' . self::TOKEN . '/' . $method,
+//            CURLOPT_POSTFIELDS => json_encode($data),
+//            CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json"))
+//        ]);
+//        $result = curl_exec($curl);
+//        curl_close($curl);
+//
+//        return (json_decode($result, 1) ? json_decode($result, 1) : $result);
     }
 
     /**
