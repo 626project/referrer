@@ -36,6 +36,8 @@ switch ($message) {
                 array('text'=>'Мне подходит вариант 1','callback_data'=>'{"action":"variant_1","count":0,"text":":like:"}'),
                 array('text'=>'Мне подходит вариант 2','callback_data'=>'{"action":"joy","count":0,"text":":joy:"}'),
                 array('text'=>'Связаться с менеджером','callback_data'=>'{"action":"hushed","count":0,"text":":hushed:"}'),
+            ),
+            array(
                 array('text'=>'Частые вопросы','callback_data'=>'{"action":"cry","count":0,"text":":cry:"}'),
                 array('text'=>'Отзывы','callback_data'=>'{"action":"rage","count":0,"text":":rage:"}'),
                 array('text'=>'Акция','callback_data'=>'{"action":"rage","count":0,"text":":rage:"}'),
