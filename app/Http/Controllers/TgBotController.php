@@ -32,22 +32,17 @@ class TgBotController extends Controller
         // log input data
         info('input data: ' . print_r($data, 1));
 
-        $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
+        if (isset($data['callback_query'])) {
+            $data = isset($data['callback_query']['data']) ? json_decode($data['callback_query']['data'], true) : [];
+            $action = isset($data['action']) ? $data['action'] : '';
+        } else {
+            $action = isset($data['message']['text']) ? $data['message']['text'] : $data['message']['data'];
+        }
+        $action = mb_strtolower($action);
+        info('action: ' . print_r($action, 1));
 
-        define('TOKEN', self::TOKEN);
-
-        $message = mb_strtolower(($data['text'] ? $data['text'] : $data['data']), 'utf-8');
-        info('__ : ' . print_r(mb_detect_encoding($message), true));
-        info('___ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false), true));
-        info('$message 1: ' . print_r($message, 1));
-        info('$message 2: ' . print_r(utf8_decode($message), 1));
-        $message = mb_convert_encoding($message, "UTF-8");
-        info('$message 3: ' . print_r(utf8_decode($message), 1));
-        info('____ : ' . print_r(mb_detect_encoding($message, ['ASCII', 'UTF-8', 'UTF-16'], false), true));
-
-        switch ($message) {
+        switch ($action) {
             case '/start':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'На данный момент мы можем предложить вам открытие в двух банках Казахстана:
 
@@ -67,24 +62,27 @@ VIP тариф, куда входит персональный менеджер,
 
 *Оплата делится на 2 платежа: 50% предоплата в момент предоставления скана занранпаспорта и 50% по факту открытия счета.',
                     'reply_markup' => [
-                        'resize_keyboard' => true,
                         'keyboard' => [
                             [
-                                ['text' => 'Мне подходит вариант 1'],
-                                ['text' => 'Мне подходит вариант 2'],
-                                ['text' => 'Связаться с менеджером'],
-                                ['text' => 'Частые вопросы'],
-                                ['text' => 'Отзывы'],
-                                ['text' => 'Акция'],
-                                ['text' => 'Договор оферта'],
+                                ['text' => 'Мне подходит вариант 1', 'callback_data'=>'{"action":"variant 1"}'],
+                                ['text' => 'Мне подходит вариант 2', 'callback_data'=>'{"action":"variant 2"}'],
+                            ],
+                            [
+                                ['text' => 'Связаться с менеджером', 'callback_data'=>'{"action":"call manager"}'],
+                                ['text' => 'Частые вопросы', 'callback_data'=>'{"action":"faq"}'],
+                            ],
+                            [
+                                ['text' => 'Отзывы', 'callback_data'=>'{"action":"reviews"}'],
+                                ['text' => 'Акция', 'callback_data'=>'{"action":"stock"}'],
+                                ['text' => 'Договор оферта', 'callback_data'=>'{"action":"show offer"}'],
                             ],
                         ]
                     ]
                 ];
                 break;
-            case 'Мне подходит вариант 1':
-            case 'Мне подходит вариант 2':
-            case 'Связаться с менеджером':
+            case 'variant 1':
+            case 'variant 2':
+            case 'faq':
             case 'Хочу узнать какие банки открывают сейчас':
             case 'Готов оформить!':
             case 'По условиям оплаты все отлично. Хочу Карту!':
@@ -93,13 +91,11 @@ VIP тариф, куда входит персональный менеджер,
             case 'Моего вопроса нет в этом списке, хочу задать свой вопрос.':
             case 'Хочу участвовать в акции':
                 // todo отправить сообщение с данными о пользователе
-                $method = 'sendMessage';
                 $send_data = [
                     'html' => '<a href="https://t.me/AlternativeAssistance">Переход на менеджера</a>',
                 ];
                 break;
-            case 'Частые вопросы':
-                $method = 'sendMessage';
+            case 'faq':
                 $send_data = [
                     'text' => 'В этом разделе мы собрали наиболее распространенные вопросы, если у вас есть дополнительные вопросы, то вы можете нажать кнопку связаться с менеджером и мы с радостью проконсультируем вас',
                     'reply_markup' => [
@@ -118,8 +114,7 @@ VIP тариф, куда входит персональный менеджер,
                     ]
                 ];
                 break;
-            case 'Акция':
-                $method = 'sendMessage';
+            case 'stock':
                 $send_data = [
                     'text' => 'Акция на Открытие банковской карты в Казахстане. Услуга вызвала большой отклик, но цена не всем подошла.
 Мы решили 1 раз в неделю делать специальное предложение для 5-10 человек со скидкой 25-35%. Стоимость карты будет составлять 40-45 тыс руб.
@@ -132,13 +127,11 @@ VIP тариф, куда входит персональный менеджер,
                     ]
                 ];
                 break;
-            case 'Договор оферта':
+            case 'show offer':
                 // todo отправка файла на договор оферты
-                $method = 'sendMessage';
                 $send_data = ['text' => 'Договор офераты пдф'];
                 break;
             case 'Какие документы нужны для оформления карты?':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Для оформления карты вы должны предоставить скан загранпаспорта. Разворот с фото, именно со сканера',
                     'keyboard' => [
@@ -150,16 +143,13 @@ VIP тариф, куда входит персональный менеджер,
                 ];
                 break;
             case 'Хочу карту!  Отправить скан паспорта':
-                $method = 'sendMessage';
                 $send_data = ['text' => 'Отправьте скан паспорта для продолжения'];
                 break;
             case 'Вернуться назад':
                 // todo удаление лишних сообщений,
-                $method = 'sendMessage';
                 $send_data = ['text' => ''];
                 break;
             case 'Как я смогу пополнять карту?':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Способы и лимиты пополнения:
 1️⃣ Пополнение карты возможно через платежное поручение на перевод рублей с любого банка РФ, без ограничений по сумме.
@@ -182,7 +172,6 @@ VIP тариф, куда входит персональный менеджер,
                 ];
                 break;
             case 'Какие оплачиваются ваши услуги?':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Условия оплаты:
 1. часть: Предоплата 50%. Оплачиваете в момент предоставления скана паспорта.
@@ -196,7 +185,6 @@ VIP тариф, куда входит персональный менеджер,
                 ];
                 break;
             case 'Я не резидент РФ. Могу ли я получить карту?':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Да, если вы резидент стран СНГ. В этом случае от вас нужен дополнительно нотариально заверенный в Казахстане перевод на русский язык вашего загранпаспорта. Эту услугу оказывают наши партнеры*',
                     'keyboard' => [
@@ -208,7 +196,6 @@ VIP тариф, куда входит персональный менеджер,
                 ];
                 break;
             case 'У меня уже есть иин, какая цена в этом случае?':
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Стоимость открытия для вас составит 55 тыс. рублей.',
                     'keyboard' => [
@@ -219,8 +206,7 @@ VIP тариф, куда входит персональный менеджер,
                     ],
                 ];
                 break;
-            case 'Отзывы':
-                $method = 'sendMessage';
+            case 'reviews':
                 $send_data = [
                     'text' => 'В этом разделе представлены отзывы. Мы решили показать вам отзывы реальных людей, у которых есть аудитория и которые делились нашим сервисом в своих социальных сетях',
                     'keyboard' => [
@@ -231,41 +217,25 @@ VIP тариф, куда входит персональный менеджер,
                 ];
                 break;
             default:
-                $method = 'sendMessage';
                 $send_data = [
                     'text' => 'Команда не найдена. Повторите попытку',
                 ];
         }
 
         $send_data['chat_id'] = $data['chat'] ['id'];
-        $res = self::sendTelegram($method, $send_data);
+        $send_data['disable_web_page_preview'] = false;
+
+        self::sendTelegram($send_data);
     }
 
     /**
-     * @param $method
      * @param $data
-     * @param array $headers
-     * @return bool|mixed|string
+     * @return void
      */
-    private function sendTelegram($method, $data, $headers = [])
+    private function sendTelegram($data)
     {
         $telegram = new Api(self::TOKEN);
         $telegram->sendMessage($data);
-//        $curl = curl_init();
-//        info('$method: ' . print_r($method, true));//fixme
-//        info('data: ' . print_r($data, true));//fixme
-//        curl_setopt_array($curl, [
-//            CURLOPT_POST => 1,
-//            CURLOPT_HEADER => 0,
-//            CURLOPT_RETURNTRANSFER => 1,
-//            CURLOPT_URL => 'https://api.telegram.org/bot' . self::TOKEN . '/' . $method,
-//            CURLOPT_POSTFIELDS => json_encode($data),
-//            CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json"))
-//        ]);
-//        $result = curl_exec($curl);
-//        curl_close($curl);
-//
-//        return (json_decode($result, 1) ? json_decode($result, 1) : $result);
     }
 
     /**
