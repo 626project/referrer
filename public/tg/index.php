@@ -13,7 +13,7 @@ function sendTelegram($method, $data, $headers = [])
         CURLOPT_RETURNTRANSFER => 1,
         CURLOPT_URL => 'https://api.telegram.org/bot' . TOKEN . '/' . $method,
         CURLOPT_POSTFIELDS => json_encode($data),
-        CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json"))
+        CURLOPT_HTTPHEADER => array_merge(array("Content-Type: application/json;charset=utf-8", "charset: utf-8", "charset=utf-8"))
     ]);
     $result = curl_exec($curl);
     curl_close($curl);
@@ -71,6 +71,7 @@ VIP тариф, куда входит персональный менеджер,
             ]
         ];
         break;
+    case "Мне подходит вариант 1":
     case "�^|не под�^eоди�^b ва�^`иан�^b 1
 ":
     case "�^|не под�^eоди�^b ва�^`иан�^b 1";
