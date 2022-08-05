@@ -31,7 +31,7 @@ class TgBotController extends Controller
         // log input data
         info('input data: ' . print_r($data, 1));
 
-        $data = isset($data['callback_query']) ? $data['callback_query'] : $data['message'];
+        $data = $data['callback_query'] ? $data['callback_query'] : $data['message'];
 
         define('TOKEN', self::TOKEN);
 
