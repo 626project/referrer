@@ -6,44 +6,46 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    Реферальные ссылки
-                    <a href="/create-link" class="float-md-right btn btn-outline-info">добавить ссылку</a>
+                    Действия пользователей
                 </div>
                 <div class="card-body">
-                    @if(count($referrer_links))
+                    @if(count($tg_users))
                         <div class="tree-view">
                             <table id="list_table" class="invisible display table table-striped table-bordered" style="width:100%">
                                 <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>ссылка</th>
-                                    <th>описание</th>
-                                    <th>кол-во</th>
-                                    <th>кол-во уник.</th>
-                                    <th>действия</th>
+                                    <th>tg id</th>
+                                    <th>профиль</th>
+                                    <th>имя</th>
+                                    <th>фамилия</th>
+                                    <th>телефон</th>
+                                    <th>действие</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($referrer_links as $referrer_link)
+                                @foreach($tg_users as $tg_user)
                                     <tr>
                                         <td>
-                                            {{$referrer_link['id']}}
+                                            {{$tg_user['id']}}
                                         </td>
                                         <td>
-                                            <a href="{{$referrer_link['link']}}">{{$referrer_link['link']}}</a>
+                                            {{$tg_user['tg_id']}}
                                         </td>
                                         <td>
-                                            {{$referrer_link['caption']}}
+                                            {{$tg_user['username']}}
                                         </td>
                                         <td>
-                                            {{$referrer_link['count']}}
+                                            {{$tg_user['first_name']}}
                                         </td>
                                         <td>
-                                            {{$referrer_link['uniq_count']}}
+                                            {{$tg_user['last_name']}}
                                         </td>
                                         <td>
-                                            <a href="/links/{{$referrer_link['id']}}">пользователи</a>
-                                            <a href="/links/{{$referrer_link['id']}}/delete">удалить</a>
+                                            {{$tg_user['phone']}}
+                                        </td>
+                                        <td>
+                                            {{$tg_user['last_action']}}
                                         </td>
                                     </tr>
                                 @endforeach

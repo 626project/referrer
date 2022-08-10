@@ -33,10 +33,12 @@ class TgBotController extends Controller
         info('input data: ' . print_r($input_data, 1));
 
         if (isset($input_data['callback_query'])) {
-            $chat_id = $input_data['callback_query']['message']['chat']['id'];
+            $message = $input_data['callback_query']['message'];
+            $chat_id = $message['chat']['id'];
             $data = isset($input_data['callback_query']['data']) ? json_decode($input_data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
         } else {
+            $message = $input_data['message'];
             $chat_id = $input_data['message']['chat'] ['id'];
             $action = isset($input_data['message']['text']) ? $input_data['message']['text'] : $input_data['message']['data'];
         }
@@ -55,11 +57,11 @@ class TgBotController extends Controller
         }
         TgUser::create([
             'link_id' => $link_id,
-            'tg_id' => $input_data['message']['from']['id'] ?? 0,
-            'username' => $input_data['message']['from']['username'] ?? '',
-            'first_name' => $input_data['message']['from']['first_name'] ?? '',
-            'last_name' => $input_data['message']['from']['last_name'] ?? '',
-            'phone' => $input_data['message']['from']['phone'] ?? '',
+            'tg_id' => $message['from']['id'] ?? 0,
+            'username' => $message['from']['username'] ?? '',
+            'first_name' => $message['from']['first_name'] ?? '',
+            'last_name' => $message['from']['last_name'] ?? '',
+            'phone' => $message['from']['phone'] ?? '',
             'last_action' => $action,
         ]);
 

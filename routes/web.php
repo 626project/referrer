@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@dashboard')->name('dashboard');
     Route::get('/create-link', 'DashboardController@create_link_page')->name('dashboard.link.create.page');
     Route::post('/create-link', 'DashboardController@create_link')->name('dashboard.link.create');
+    Route::get('/links/{id}', 'DashboardController@show_tg_users')->name('dashboard.link.show.tg.users');
     Route::get('/links/{id}/delete', 'DashboardController@delete_link')->name('dashboard.link.delete');
 });
 
