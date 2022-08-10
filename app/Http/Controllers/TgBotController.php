@@ -303,7 +303,7 @@ VIP тариф, куда входит персональный менеджер,
             'referrer_link_id' => $referrer_link->id,
         ]);
 
-        return redirect('http://t.me/Info24PlatformBot');
+        return redirect('http://t.me/Info24PlatformBot?link_id=' . $referrer_link->id);
 //        return redirect('http://t.me/AlternativeAssistance');
     }
 }
