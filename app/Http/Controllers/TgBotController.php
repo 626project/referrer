@@ -43,8 +43,9 @@ class TgBotController extends Controller
         $action = mb_strtolower($action);
         info('action: ' . print_r($action, 1));
         $disable_web_page_preview = false;
-        if (strripos($action, "\/start")) {
+        if (strripos($action, "start")) {
             $link_id = str_replace('/start ', '', $action);
+            info('link_id: ' . print_r($link_id, 1));
             $action = '/start';
         } else {
             $tg_user = TgUser::where(['tg_id' => $input_data['message']['from']['id']])
