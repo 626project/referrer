@@ -33,12 +33,12 @@ class TgBotController extends Controller
         info('input data: ' . print_r($input_data, 1));
 
         if (isset($input_data['callback_query'])) {
-            $message = $input_data['callback_query']['message'];
-            $chat_id = $message['chat']['id'];
+            $message_from = $input_data['callback_query']['from'];
+            $chat_id = $input_data['callback_query']['message']['chat']['id'];
             $data = isset($input_data['callback_query']['data']) ? json_decode($input_data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
         } else {
-            $message = $input_data['message'];
+            $message_from = $input_data['message']['from'];
             $chat_id = $input_data['message']['chat'] ['id'];
             $action = isset($input_data['message']['text']) ? $input_data['message']['text'] : $input_data['message']['data'];
         }
@@ -50,18 +50,18 @@ class TgBotController extends Controller
             info('link_id: ' . print_r($link_id, 1));
             $action = '/start';
         } else {
-            $tg_user = TgUser::where(['tg_id' => $message['from']['id']])
+            $tg_user = TgUser::where(['tg_id' => $message_from['id']])
                 ->orderBy('id', 'DESC')
                 ->first();
             $link_id = $tg_user->link_id;
         }
         TgUser::create([
             'link_id' => $link_id,
-            'tg_id' => $message['from']['id'] ?? 0,
-            'username' => $message['from']['username'] ?? '',
-            'first_name' => $message['from']['first_name'] ?? '',
-            'last_name' => $message['from']['last_name'] ?? '',
-            'phone' => $message['from']['phone'] ?? '',
+            'tg_id' => $message_from['id'] ?? 0,
+            'username' => $message_from['username'] ?? '',
+            'first_name' => $message_from['first_name'] ?? '',
+            'last_name' => $message_from['last_name'] ?? '',
+            'phone' => $message_from['phone'] ?? '',
             'last_action' => $action,
         ]);
 
