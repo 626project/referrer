@@ -50,7 +50,7 @@ class TgBotController extends Controller
             info('link_id: ' . print_r($link_id, 1));
             $action = '/start';
         } else {
-            $tg_user = TgUser::where(['tg_id' => $input_data['message']['from']['id']])
+            $tg_user = TgUser::where(['tg_id' => $message['from']['id']])
                 ->orderBy('id', 'DESC')
                 ->first();
             $link_id = $tg_user->link_id;
