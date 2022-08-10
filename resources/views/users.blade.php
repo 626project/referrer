@@ -19,7 +19,7 @@
                                     <th>профиль</th>
                                     <th>имя</th>
                                     <th>фамилия</th>
-                                    <th>телефон</th>
+{{--                                    <th>телефон</th>--}}
                                     <th>действие</th>
                                 </tr>
                                 </thead>
@@ -41,9 +41,9 @@
                                         <td>
                                             {{$tg_user['last_name']}}
                                         </td>
-                                        <td>
-                                            {{$tg_user['phone']}}
-                                        </td>
+{{--                                        <td>--}}
+{{--                                            {{$tg_user['phone']}}--}}
+{{--                                        </td>--}}
                                         <td>
                                             {{$tg_user['last_action']}}
                                         </td>
