@@ -10,6 +10,7 @@ class TgUser extends Model
      * @var array
      */
     protected $fillable = [
+        'link_id',
         'tg_id',
         'username',
         'first_name',

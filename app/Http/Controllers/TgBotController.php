@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ReferrerLink;
 use App\Models\ReferrerRedirect;
+use App\Models\TgUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
@@ -27,21 +28,39 @@ class TgBotController extends Controller
      */
     public function index()
     {
-        $data = json_decode(file_get_contents('php://input'), TRUE);
+        $input_data = json_decode(file_get_contents('php://input'), TRUE);
         // log input data
-        info('input data: ' . print_r($data, 1));
+        info('input data: ' . print_r($input_data, 1));
 
-        if (isset($data['callback_query'])) {
-            $chat_id = $data['callback_query']['message']['chat']['id'];
-            $data = isset($data['callback_query']['data']) ? json_decode($data['callback_query']['data'], true) : [];
+        if (isset($input_data['callback_query'])) {
+            $chat_id = $input_data['callback_query']['message']['chat']['id'];
+            $data = isset($input_data['callback_query']['data']) ? json_decode($input_data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
         } else {
-            $chat_id = $data['message']['chat'] ['id'];
-            $action = isset($data['message']['text']) ? $data['message']['text'] : $data['message']['data'];
+            $chat_id = $input_data['message']['chat'] ['id'];
+            $action = isset($input_data['message']['text']) ? $input_data['message']['text'] : $input_data['message']['data'];
         }
         $action = mb_strtolower($action);
         info('action: ' . print_r($action, 1));
         $disable_web_page_preview = false;
+        if (strripos($action, '/start')) {
+            $link_id = str_replace('/start ', '', $action);
+            $action = '/start';
+        } else {
+            $tg_user = TgUser::where(['tg_id' => $input_data['message']['from']['id']])
+                ->orderBy('id', 'DESC')
+                ->first();
+            $link_id = $tg_user->link_id;
+        }
+        TgUser::create([
+            'link_id' => $link_id,
+            'tg_id' => $input_data['message']['from']['id'] ?? 0,
+            'username' => $input_data['message']['from']['username'] ?? '',
+            'first_name' => $input_data['message']['from']['first_name'] ?? '',
+            'last_name' => $input_data['message']['from']['last_name'] ?? '',
+            'phone' => $input_data['message']['from']['phone'] ?? '',
+            'last_action' => $action,
+        ]);
 
         switch ($action) {
             case '/start':
@@ -303,7 +322,7 @@ VIP тариф, куда входит персональный менеджер,
             'referrer_link_id' => $referrer_link->id,
         ]);
 
-        return redirect('http://t.me/Info24PlatformBot?link_id=' . $referrer_link->id);
+        return redirect('http://t.me/Info24PlatformBot?start=' . $referrer_link->id);
 //        return redirect('http://t.me/AlternativeAssistance');
     }
 }
