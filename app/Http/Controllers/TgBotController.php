@@ -236,7 +236,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 $tg_message = TgMessage::where([
                     'tg_user_id' => $message_from['id'],
                     'tg_bot_id' => $chat_id,
-                ]);
+                ])->first();
                 $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_user_id);
                 $send_message = false;
                 break;
