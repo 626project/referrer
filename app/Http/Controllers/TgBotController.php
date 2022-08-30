@@ -233,8 +233,12 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 // todo удаление лишних сообщений,
                 $tg_messages = TgMessage::where([
                     'tg_user_id' => $message_from['id'],
-                    'group_id' => $message['message_id'],
-                ])->get();
+                ])
+                    ->where(function($query) use ($message) {
+                        $query->where('group_id', $message['message_id'])
+                            ->orWhere('tg_message_id', $message['message_id']);
+                    })
+                    ->get();
                 info('tg_user_id: ' . $message_from['id']);//fixme
                 info('message id: ' . $message['message_id']);//fixme
                 foreach ($tg_messages as $tg_message) {
