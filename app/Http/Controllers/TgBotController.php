@@ -71,6 +71,7 @@ class TgBotController extends Controller
             'tg_bot_id' => $chat_id,
         ]);
 
+        $send_message = true;
         switch ($action) {
             case '/start':
                 $send_data = [
@@ -230,7 +231,12 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 break;
             case 'go back':
                 // todo удаление лишних сообщений,
-                $send_data = ['text' => '...'];
+                $tg_message = TgMessage::where([
+                    'tg_user_id' => $message_from['id'],
+                    'tg_bot_id' => $chat_id,
+                ]);
+                $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_user_id);
+                $send_message = false;
                 break;
             case 'card replenishment':
                 $send_data = [
@@ -323,7 +329,9 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $send_data['chat_id'] = $chat_id;
         $send_data['disable_web_page_preview'] = $disable_web_page_preview;
 
-        self::sendTelegram($send_data);
+        if ($send_message) {
+            self::sendTelegram($send_data);
+        }
     }
 
     /**
@@ -334,6 +342,20 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
     {
         $telegram = new Api(self::TOKEN);
         $telegram->sendMessage($data);
+    }
+
+    /**
+     * @param $chat_id
+     * @param $message_id
+     * @return false|string
+     */
+    private function delete_message($chat_id, $message_id)
+    {
+        $apiUri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
+            . '&chat_id=' . $chat_id
+            . '&message_id=' . $message_id;
+
+        return file_get_contents($apiUri);
     }
 
     /**
