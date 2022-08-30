@@ -235,13 +235,14 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'tg_user_id' => $message_from['id'],
                     'group_id' => $message['message_id'],
                 ])->get();
-                info('message id: ' . $message['message_id']);//fixme
                 info('tg_user_id: ' . $message_from['id']);//fixme
+                info('message id: ' . $message['message_id']);//fixme
                 foreach ($tg_messages as $tg_message) {
-                    $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
                     info('delete tg message id: ' . $tg_message->id);
+                    $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
                     $tg_message->delete();
                 }
+                info('after foreach');//fixme
                 $send_message = false;
                 break;
             case 'card replenishment':
