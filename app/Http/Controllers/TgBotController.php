@@ -556,7 +556,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
             info('delete tg message id: ' . $tg_message->id);
             $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
             $tg_message->delete();
-            if ($tg_message->group_id !== $message_id) {
+            if ($tg_message->group_id && $tg_message->group_id !== $message_id) {
                 $this->delete_messages($tg_user_id, $tg_message->group_id);
             }
         }
