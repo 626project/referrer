@@ -66,6 +66,12 @@ class TgBotController extends Controller
             'phone' => $message_from['phone'] ?? '',
             'last_action' => $action,
         ]);
+        TgMessage::create([
+            'action' => $action,
+            'tg_message_id' => $message['message_id'],
+            'tg_user_id' => $message_from['id'],
+            'tg_bot_id' => $chat_id,
+        ]);
 
         $send_message = true;
         switch ($action) {
@@ -332,13 +338,6 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         if ($send_message) {
             self::sendTelegram($send_data);
         }
-
-        TgMessage::create([
-            'action' => $action,
-            'tg_message_id' => $message['message_id'],
-            'tg_user_id' => $message_from['id'],
-            'tg_bot_id' => $chat_id,
-        ]);
     }
 
     /**
