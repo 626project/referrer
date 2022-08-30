@@ -230,7 +230,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 $send_data = ['text' => 'Договор офераты пдф'];
                 break;
             case 'go back':
-                $this->delete_messages($message_from['id'], $message_from['id']);
+                $this->delete_messages($message_from['id'], $message['message_id']);
                 $send_message = false;
                 break;
             case 'card replenishment':
