@@ -333,13 +333,10 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                                 ['text' => 'Никита', 'callback_data'=>'{"action":"reviews 3"}'],
                             ],
                             [
-                                ['text' => 'Новая папка', 'callback_data'=>'{"action":"reviews 4"}'],
+                                ['text' => 'Юлия Бездарь', 'callback_data'=>'{"action":"reviews 4"}'],
                             ],
                             [
-                                ['text' => 'Юлия Бездарь', 'callback_data'=>'{"action":"reviews 5"}'],
-                            ],
-                            [
-                                ['text' => 'Яна Левенцева', 'callback_data'=>'{"action":"reviews 6"}'],
+                                ['text' => 'Яна Левенцева', 'callback_data'=>'{"action":"reviews 5"}'],
                             ],
                             [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
@@ -354,6 +351,21 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'disable_web_page_preview' => $disable_web_page_preview,
                 ];
                 foreach (['photo_2022-08-08 15.34.44.jpeg', 'photo_2022-08-08 15.34.47.jpeg', 'photo_2022-08-08 15.34.49.jpeg', 'photo_2022-08-08 15.34.53.jpeg'] as $photo_name) {
+                    $send_data['photo'] = config('app.url') . '/reviews/1/' . $photo_name;
+                    $this->telegram->sendPhoto($send_data);
+                }
+                unset($send_data['photo']);
+                $send_data['video'] = config('app.url') . '/reviews/1/b79e9407dd224a7b8742f899bbcd8a0d.mov';
+                $this->telegram->sendVideo($send_data);
+                $send_message = false;
+                break;
+            case 'reviews 2':
+                $send_data = [
+                    'chat_id' => $chat_id,
+                    'disable_web_page_preview' => $disable_web_page_preview,
+                ];
+                $media_files = [];
+                foreach (['photo_2022-08-08 15.44.51.jpeg', 'photo_2022-08-08 15.44.54.jpeg'] as $photo_name) {
                     $send_data['photo'] = config('app.url') . '/reviews/1/' . $photo_name;
                     $this->telegram->sendPhoto($send_data);
                 }
