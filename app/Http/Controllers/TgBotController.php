@@ -105,10 +105,10 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'reply_markup' => json_encode([
                         'inline_keyboard' => [
                             [
-                                ['text' => 'Мне подходит вариант 1', 'callback_data'=>'{"action":"variant 1"}'],
+                                ['text' => 'Мне подходит вариант 1', 'callback_data'=>'{"action":"variant 1"}', 'url' => 'https://t.me/AlternativeAssistance'],
                             ],
                             [
-                                ['text' => 'Мне подходит вариант 2', 'callback_data'=>'{"action":"variant 2"}'],
+                                ['text' => 'Мне подходит вариант 2', 'url' => 'https://t.me/AlternativeAssistance'],
                             ],
                             [
                                 ['text' => 'Мне подходит вариант 3', 'callback_data'=>'{"action":"variant 3"}'],
