@@ -66,7 +66,7 @@ class TgBotController extends Controller
         ]);
         TgMessage::create([
             'action' => $action,
-            'tg_message_id' => $input_data['message_id'],
+            'tg_message_id' => $input_data['message']['message_id'],
             'tg_user_id' => $message_from['id'],
             'tg_bot_id' => $chat_id,
         ]);
