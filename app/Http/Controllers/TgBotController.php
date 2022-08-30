@@ -69,14 +69,9 @@ class TgBotController extends Controller
             'phone' => $message_from['phone'] ?? '',
             'last_action' => $action,
         ]);
-        TgMessage::create([
-            'action' => $action,
-            'tg_message_id' => $message['message_id'],
-            'tg_user_id' => $message_from['id'],
-            'tg_bot_id' => $chat_id,
-        ]);
 
         $send_message = true;
+        $group_id = null;
         switch ($action) {
             case '/start':
                 $send_data = [
@@ -357,8 +352,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.34.53.jpeg' => 'photo',
                     'b79e9407dd224a7b8742f899bbcd8a0d.mov' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 1);
-                $send_message = false;
+                $this->send_media_files($send_data, $media_files, 1, $message_from['id'], $action);
+                $group_id = $message['message_id'];
                 break;
             case 'reviews 2':
                 $send_data = [
@@ -371,8 +366,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     '510067915_295975166_1072048663687545_5176148860360225848_n.mp4' => 'video',
                     '510067915_296797225_627808898513213_3549416364628311978_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 2);
-                $send_message = false;
+                $this->send_media_files($send_data, $media_files, 2, $message_from['id'], $action);
+                $group_id = $message['message_id'];
                 break;
             case 'reviews 3':
                 $send_data = [
@@ -386,8 +381,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.41.47.jpeg' => 'photo',
                     '510067915_296221184_341341454853135_7851361796163644737_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 3);
-                $send_message = false;
+                $this->send_media_files($send_data, $media_files, 3, $message_from['id'], $action);
+                $group_id = $message['message_id'];
                 break;
             case 'reviews 4':
                 $send_data = [
@@ -406,8 +401,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.30.47.jpeg' => 'photo',
                     'photo_2022-08-08 15.30.53.jpeg' => 'photo',
                 ];
-                $this->send_media_files($send_data, $media_files, 4);
-                $send_message = false;
+                $this->send_media_files($send_data, $media_files, 4, $message_from['id'], $action);
+                $group_id = $message['message_id'];
                 break;
             case 'reviews 5':
                 $send_data = [
@@ -423,8 +418,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     '510067915_295528928_466234748283841_1263878676191726693_n.mp4' => 'video',
                     '510067915_296401522_734136984484264_3715331654570136976_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 5);
-                $send_message = false;
+                $this->send_media_files($send_data, $media_files, 5, $message_from['id'], $action);
+                $group_id = $message['message_id'];
                 break;
             default:
                 $send_data = [
@@ -435,7 +430,19 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $send_data['disable_web_page_preview'] = $disable_web_page_preview;
 
         if ($send_message) {
-            self::send_telegram($send_data);
+            if ($group_id) {
+                $send_data = [
+                    'text' => '',
+                    'reply_markup' => json_encode([
+                        'inline_keyboard' => [
+                            [
+                                ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
+                            ],
+                        ],
+                    ]),
+                ];
+            }
+            self::send_telegram($send_data, $action, $group_id);
         }
     }
 
@@ -443,17 +450,35 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
      * @param $data
      * @return void
      */
-    private function send_telegram($data)
-    {
-        $this->telegram->sendMessage($data);
+    private function send_telegram(
+        array $data,
+        string $action,
+        int $group_id = null
+    ) {
+        $result = $this->telegram->sendMessage($data);
+
+        TgMessage::create([
+            'action' => $action,
+            'tg_message_id' => $result->getMessageId(),
+            'tg_user_id' => $result->getChat()->getId(),
+            'group_id' => $group_id,
+        ]);
     }
 
     /**
      * @param array $send_data
      * @param array $media_files
      * @param int $review_code
+     * @param int $group_id
+     * @param string $action
      */
-    private function send_media_files(array $send_data, array $media_files, int $review_code) {
+    private function send_media_files(
+        array $send_data,
+        array $media_files,
+        int $review_code,
+        int $group_id,
+        string $action
+    ) {
 
         foreach ($media_files as $media_name => $type) {
             $url = config('app.url') . '/reviews/' . $review_code . '/' . $media_name;
@@ -466,7 +491,12 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 $send_data['video'] = $url;
                 $result = $this->telegram->sendVideo($send_data);
             }
-            info('result: ' . print_r($result, true));//fixme
+            TgMessage::create([
+                'action' => $action,
+                'tg_message_id' => $result->getMessageId(),
+                'tg_user_id' => $result->getChat()->getId(),
+                'group_id' => $group_id,
+            ]);
         }
     }
 

@@ -16,6 +16,6 @@ class TgMessage extends Model
         'action',
         'tg_message_id',
         'tg_user_id',
-        'tg_bot_id',
+        'group_id',
     ];
 }
