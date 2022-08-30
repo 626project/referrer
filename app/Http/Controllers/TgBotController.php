@@ -237,7 +237,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'tg_user_id' => $message_from['id'],
                     'tg_bot_id' => $chat_id,
                 ])->first();
-                $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_user_id);
+                $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_message_id);
                 $send_message = false;
                 break;
             case 'card replenishment':
@@ -353,11 +353,11 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
      */
     private function delete_message($chat_id, $message_id)
     {
-        $apiUri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
+        $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
             . '&chat_id=' . $chat_id
             . '&message_id=' . $message_id;
 
-        return file_get_contents($apiUri);
+        return file_get_contents($api_uri);
     }
 
     /**
