@@ -71,7 +71,7 @@ class TgBotController extends Controller
         ]);
 
         $send_message = true;
-        $group_id = null;
+        $group_id = 0;
         switch ($action) {
             case '/start':
                 $send_data = [
@@ -447,13 +447,15 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
     }
 
     /**
-     * @param $data
+     * @param array $data
+     * @param string $action
+     * @param int $group_id
      * @return void
      */
     private function send_telegram(
         array $data,
         string $action,
-        int $group_id = null
+        int $group_id = 0
     ) {
         $result = $this->telegram->sendMessage($data);
 
