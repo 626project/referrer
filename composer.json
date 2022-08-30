@@ -22,6 +22,7 @@
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^1.1",
+        "maatwebsite/excel": "^3.1",
         "predis/predis": "^1.1",
         "rap2hpoutre/fast-excel": "^1.7",
         "simplesoftwareio/simple-qrcode": "^3.0",

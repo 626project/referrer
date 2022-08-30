@@ -21,7 +21,9 @@
                         </label>
                         &#160;&#160;
                         <input type="submit" value="обновить">
+                        <a href="/links/{{$link_id}}/download?start_date={{$start_date}}&end_date={{$end_date}}" style="float: right">Скачать файл</a>
                     </form>
+
                     @if(count($tg_users))
                         <div class="tree-view">
                             <table id="list_table" class="invisible display table table-striped table-bordered" style="width:100%">

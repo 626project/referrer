@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReferrerLink;
-use App\Models\ReferrerRedirect;
 use App\Models\TgUser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
+use Excel;
 
 class DashboardController extends Controller
 {
@@ -104,5 +104,50 @@ class DashboardController extends Controller
             'end_date' => $end_date,
             'link_id' => $link_id,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $link_id
+     * @return void
+     */
+    public function download(Request $request, int $link_id)
+    {
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+        $tg_users_request = TgUser::where(['link_id' => $link_id])
+            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
+        if ($start_date) {
+            $tg_users_request->where('created_at', '>=', $start_date);
+        }
+        if ($end_date) {
+            $tg_users_request->where('created_at', '<', $end_date);
+        }
+
+        $tg_users = $tg_users_request->get();
+
+        Excel::create('result_' . date('Y-m-d'), function($excel) use ($tg_users) {
+            $excel->setTitle('Result download');
+            $excel->setCreator('Me')->setCompany('alternativeassistance.ru');
+            $excel->setDescription('Статистика действий пользователей');
+
+            $titles = ['id', 'tg id', 'профиль', 'имя', 'фамилия', 'действие', 'дата'];
+            $excel->sheet('Sheet 1', function ($sheet) use ($titles, $tg_users) {
+                $sheet->setOrientation('landscape');
+                $sheet->fromArray($titles);
+                foreach ($tg_users as $tg_user) {
+                    $row = [
+                        $tg_user['id'],
+                        $tg_user['tg_id'],
+                        $tg_user['username'],
+                        $tg_user['first_name'],
+                        $tg_user['last_name'],
+                        $tg_user['last_action'],
+                        $tg_user['created_at'],
+                    ];
+                    $sheet->fromArray($row);
+                }
+            });
+        })->download('xls');
     }
 }
