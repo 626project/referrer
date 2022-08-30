@@ -15,6 +15,8 @@ class TgBotController extends Controller
 {
     const TOKEN = '5402169870:AAGd1B4gqLVz_1F6pLWVjh5fBVXuOadRqgw';
 
+    private $telegram;
+
     /**
      * Create a new controller instance.
      *
@@ -22,6 +24,7 @@ class TgBotController extends Controller
      */
     public function __construct()
     {
+        $this->telegram = new Api(self::TOKEN);
     }
 
     /**
@@ -105,10 +108,10 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'reply_markup' => json_encode([
                         'inline_keyboard' => [
                             [
-                                ['text' => 'Мне подходит вариант 1', 'callback_data'=>'{"action":"variant 1"}', 'url' => 'https://t.me/AlternativeAssistance'],
+                                ['text' => 'Мне подходит вариант 1', 'callback_data'=>'{"action":"variant 1"}'],
                             ],
                             [
-                                ['text' => 'Мне подходит вариант 2', 'url' => 'https://t.me/AlternativeAssistance'],
+                                ['text' => 'Мне подходит вариант 2', 'callback_data'=>'{"action":"variant 2"}'],
                             ],
                             [
                                 ['text' => 'Мне подходит вариант 3', 'callback_data'=>'{"action":"variant 3"}'],
@@ -321,11 +324,43 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'reply_markup' => json_encode([
                         'inline_keyboard' => [
                             [
+                                ['text' => 'Виктория Кабочкина', 'callback_data'=>'{"action":"reviews 1"}'],
+                            ],
+                            [
+                                ['text' => 'Инна Аминова', 'callback_data'=>'{"action":"reviews 2"}'],
+                            ],
+                            [
+                                ['text' => 'Никита', 'callback_data'=>'{"action":"reviews 3"}'],
+                            ],
+                            [
+                                ['text' => 'Новая папка', 'callback_data'=>'{"action":"reviews 4"}'],
+                            ],
+                            [
+                                ['text' => 'Юлия Бездарь', 'callback_data'=>'{"action":"reviews 5"}'],
+                            ],
+                            [
+                                ['text' => 'Яна Левенцева', 'callback_data'=>'{"action":"reviews 6"}'],
+                            ],
+                            [
                                 ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
                             ],
                         ],
                     ]),
                 ];
+                break;
+            case 'reviews 1':
+                $send_data = [
+                    'chat_id' => $chat_id,
+                    'disable_web_page_preview' => $disable_web_page_preview,
+                ];
+                foreach (['photo_2022-08-08 15.34.44.jpeg', 'photo_2022-08-08 15.34.47.jpeg', 'photo_2022-08-08 15.34.49.jpeg', 'photo_2022-08-08 15.34.53.jpeg'] as $photo_name) {
+                    $send_data['photo'] = config('app.url') . '/reviews/1/' . $photo_name;
+                    $this->telegram->sendPhoto($send_data);
+                }
+                unset($send_data['photo']);
+                $send_data['video'] = config('app.url') . '/reviews/1/b79e9407dd224a7b8742f899bbcd8a0d.mov';
+                $this->telegram->sendVideo($send_data);
+                $send_message = false;
                 break;
             default:
                 $send_data = [
@@ -336,7 +371,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $send_data['disable_web_page_preview'] = $disable_web_page_preview;
 
         if ($send_message) {
-            self::sendTelegram($send_data);
+            self::send_telegram($send_data);
         }
     }
 
@@ -344,10 +379,9 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
      * @param $data
      * @return void
      */
-    private function sendTelegram($data)
+    private function send_telegram($data)
     {
-        $telegram = new Api(self::TOKEN);
-        $telegram->sendMessage($data);
+        $this->telegram->sendMessage($data);
     }
 
     /**
@@ -360,7 +394,6 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
             . 'chat_id=' . $chat_id
             . '&message_id=' . $message_id;
-        info('$api_uri: ' . $api_uri);
 
         return file_get_contents($api_uri);
     }
@@ -394,6 +427,5 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         ]);
 
         return redirect('http://t.me/Info24PlatformBot?start=' . $referrer_link->id);
-//        return redirect('http://t.me/AlternativeAssistance');
     }
 }
