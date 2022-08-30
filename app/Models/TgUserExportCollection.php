@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as BuilderAlias;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 
-class TgUserExportCollection implements FromQuery
+class TgUserExportCollection implements FromCollection
 {
     use Exportable;
 
@@ -48,5 +49,10 @@ class TgUserExportCollection implements FromQuery
         info($tg_users_request->count());
 
         return $tg_users_request->get();
+    }
+
+    public function collection()
+    {
+        return TgUser::all();
     }
 }
