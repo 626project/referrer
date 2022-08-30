@@ -87,7 +87,8 @@ class DashboardController extends Controller
         $tg_users = TgUser::where(['link_id' => $link_id])
             ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action'])
             ->distinct('last_action')
-            ->pluck('last_action');
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         return view('users', [
             'tg_users' => $tg_users,
