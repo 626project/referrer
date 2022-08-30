@@ -231,15 +231,15 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 break;
             case 'go back':
                 // todo удаление лишних сообщений,
-                $tg_message = TgMessage::where([
+                $tg_messages = TgMessage::where([
                     'tg_user_id' => $message_from['id'],
-                    'tg_bot_id' => $chat_id,
-                ])
-                    ->orderBy('id', 'DESC')
-                    ->first();
-                $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_message_id);
-                info('delete tg message id: ' . $tg_message->id);
-                $tg_message->delete();
+                    'group_id' => $message['message_id'],
+                ])->get();
+                foreach ($tg_messages as $tg_message) {
+                    $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
+                    info('delete tg message id: ' . $tg_message->id);
+                    $tg_message->delete();
+                }
                 $send_message = false;
                 break;
             case 'card replenishment':
