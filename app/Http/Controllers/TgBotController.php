@@ -235,6 +235,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'tg_user_id' => $message_from['id'],
                     'group_id' => $message['message_id'],
                 ])->get();
+                info('message id: ' . $message['message_id']);//fixme
+                info('tg_user_id: ' . $message_from['id']);//fixme
                 foreach ($tg_messages as $tg_message) {
                     $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
                     info('delete tg message id: ' . $tg_message->id);
@@ -512,6 +514,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
             . 'chat_id=' . $chat_id
             . '&message_id=' . $message_id;
+        info('$api_uri: ' . $api_uri);//fixme
 
         return file_get_contents($api_uri);
     }
