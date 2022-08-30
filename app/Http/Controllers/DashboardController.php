@@ -109,7 +109,9 @@ class DashboardController extends Controller
      */
     public function download(Request $request, int $link_id)
     {
-        return (new TgUserExportCollection($link_id, $request->get('start_date'), $request->get('end_date')))->download('invoices.xlsx');
+        $export_collection = new TgUserExportCollection($link_id, $request->get('start_date'), $request->get('end_date'));
+
+        return ($export_collection)->download('result_' . date('Y-m-d') . '.xlsx');
     }
 
     /**
