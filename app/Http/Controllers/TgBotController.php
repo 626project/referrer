@@ -354,8 +354,9 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
     private function delete_message($chat_id, $message_id)
     {
         $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
-            . '&chat_id=' . $chat_id
+            . 'chat_id=' . $chat_id
             . '&message_id=' . $message_id;
+        info('$api_uri: ' . $api_uri);
 
         return file_get_contents($api_uri);
     }
