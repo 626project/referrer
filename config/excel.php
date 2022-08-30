@@ -293,7 +293,7 @@ return [
         | storing reading or downloading. Here you can customize that path.
         |
         */
-        'local_path'          => storage_path('storage/app/public'),
+        'local_path'          => storage_path('framework/cache/laravel-excel'),
 
         /*
         |--------------------------------------------------------------------------
