@@ -79,17 +79,30 @@ class DashboardController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param int $link_id
      * @return Renderable
      */
-    public function show_tg_users(int $link_id)
+    public function show_tg_users(Request $request, int $link_id)
     {
-        $tg_users = TgUser::where(['link_id' => $link_id])
-            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action'])
-            ->get();
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+        $tg_users_request = TgUser::where(['link_id' => $link_id])
+            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
+        if ($start_date) {
+            $tg_users_request->where('created_at', '>=', $start_date);
+        }
+        if ($end_date) {
+            $tg_users_request->where('created_at', '<', $end_date);
+        }
+
+        $tg_users = $tg_users_request->get();
 
         return view('users', [
             'tg_users' => $tg_users,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'link_id' => $link_id,
         ]);
     }
 }

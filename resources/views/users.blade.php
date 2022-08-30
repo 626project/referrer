@@ -9,6 +9,19 @@
                     Действия пользователей
                 </div>
                 <div class="card-body">
+                    <form action="/links/{{$link_id}}">
+                        <label>
+                            от&#160;
+                            <input type="date" name="start_date" value="{{$start_date}}">
+                        </label>
+                        &#160;&#160;
+                        <label>
+                            до&#160;
+                            <input type="date" name="end_date" value="{{$end_date}}">
+                        </label>
+                        &#160;&#160;
+                        <input type="submit" value="обновить">
+                    </form>
                     @if(count($tg_users))
                         <div class="tree-view">
                             <table id="list_table" class="invisible display table table-striped table-bordered" style="width:100%">
