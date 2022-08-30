@@ -87,16 +87,7 @@ class DashboardController extends Controller
     {
         $start_date = $request->get('start_date');
         $end_date = $request->get('end_date');
-        $tg_users_request = TgUser::where(['link_id' => $link_id])
-            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
-        if ($start_date) {
-            $tg_users_request->where('created_at', '>=', $start_date);
-        }
-        if ($end_date) {
-            $tg_users_request->where('created_at', '<', $end_date);
-        }
-
-        $tg_users = $tg_users_request->get();
+        $tg_users = $this->get_tg_users($request, $link_id);
 
         return view('users', [
             'tg_users' => $tg_users,
@@ -113,19 +104,8 @@ class DashboardController extends Controller
      */
     public function download(Request $request, int $link_id)
     {
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
-        $tg_users_request = TgUser::where(['link_id' => $link_id])
-            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
-        if ($start_date) {
-            $tg_users_request->where('created_at', '>=', $start_date);
-        }
-        if ($end_date) {
-            $tg_users_request->where('created_at', '<', $end_date);
-        }
-
-        $tg_users = $tg_users_request->get();
-
+        info(1);
+        $tg_users = $this->get_tg_users($request, $link_id);
         Excel::create('result_' . date('Y-m-d'), function($excel) use ($tg_users) {
             $excel->setTitle('Result download');
             $excel->setCreator('Me')->setCompany('alternativeassistance.ru');
@@ -149,5 +129,29 @@ class DashboardController extends Controller
                 }
             });
         })->download('xls');
+        info(2);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $link_id
+     * @return mixed
+     */
+    private function get_tg_users(
+        Request $request,
+        int $link_id
+    ) {
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+        $tg_users_request = TgUser::where(['link_id' => $link_id])
+            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
+        if ($start_date) {
+            $tg_users_request->where('created_at', '>=', $start_date);
+        }
+        if ($end_date) {
+            $tg_users_request->where('created_at', '<', $end_date);
+        }
+
+        return $tg_users_request->get();
     }
 }

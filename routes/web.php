@@ -22,7 +22,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/create-link', 'DashboardController@create_link')->name('dashboard.link.create');
     Route::group(['prefix' => '/links/{id}'], function () {
         Route::get('', 'DashboardController@show_tg_users')->name('dashboard.link.tg.users');
-        Route::get('download', 'DashboardController@show_tg_users')->name('dashboard.link.tg.users.download');
+        Route::get('download', 'DashboardController@download')->name('dashboard.link.tg.users.download');
         Route::get('delete', 'DashboardController@delete_link')->name('dashboard.link.delete');
     });
 });
