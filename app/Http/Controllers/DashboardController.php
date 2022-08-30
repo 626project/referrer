@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ReferrerLink;
 use App\Models\TgUser;
+use App\Models\TgUserExportCollection;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
@@ -13,12 +14,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
+    private $excel;
+
     /**
      * @return void
      */
-    public function __construct()
+    public function __construct(Excel $excel)
     {
         $this->middleware('auth');
+
+        $this->excel = $excel;
     }
 
     /**
@@ -100,36 +105,11 @@ class DashboardController extends Controller
     /**
      * @param Request $request
      * @param int $link_id
-     * @return void
+     * @return \Illuminate\Http\Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function download(Request $request, int $link_id)
     {
-        info(1);
-        $tg_users = $this->get_tg_users($request, $link_id);
-        Excel::create('result_' . date('Y-m-d'), function($excel) use ($tg_users) {
-            $excel->setTitle('Result download');
-            $excel->setCreator('Me')->setCompany('alternativeassistance.ru');
-            $excel->setDescription('Статистика действий пользователей');
-
-            $titles = ['id', 'tg id', 'профиль', 'имя', 'фамилия', 'действие', 'дата'];
-            $excel->sheet('Sheet 1', function ($sheet) use ($titles, $tg_users) {
-                $sheet->setOrientation('landscape');
-                $sheet->fromArray($titles);
-                foreach ($tg_users as $tg_user) {
-                    $row = [
-                        $tg_user['id'],
-                        $tg_user['tg_id'],
-                        $tg_user['username'],
-                        $tg_user['first_name'],
-                        $tg_user['last_name'],
-                        $tg_user['last_action'],
-                        $tg_user['created_at'],
-                    ];
-                    $sheet->fromArray($row);
-                }
-            });
-        })->download('xls');
-        info(2);
+        return (new TgUserExportCollection($link_id, $request->get('start_date'), $request->get('end_date')))->download('invoices.xlsx');
     }
 
     /**
