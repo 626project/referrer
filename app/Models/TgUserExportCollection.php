@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Builder as BuilderAlias;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\FromQuery;
 
 class TgUserExportCollection implements FromCollection
 {
@@ -34,9 +31,9 @@ class TgUserExportCollection implements FromCollection
     }
 
     /**
-     * @return Builder|BuilderAlias
+     * @return Collection
      */
-    public function query()
+    public function collection()
     {
         $tg_users_request = TgUser::where(['link_id' => $this->link_id])
             ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
@@ -49,10 +46,5 @@ class TgUserExportCollection implements FromCollection
         info($tg_users_request->count());
 
         return $tg_users_request->get();
-    }
-
-    public function collection()
-    {
-        return TgUser::all();
     }
 }
