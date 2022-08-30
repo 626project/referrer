@@ -350,13 +350,14 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'chat_id' => $chat_id,
                     'disable_web_page_preview' => $disable_web_page_preview,
                 ];
-                foreach (['photo_2022-08-08 15.34.44.jpeg', 'photo_2022-08-08 15.34.47.jpeg', 'photo_2022-08-08 15.34.49.jpeg', 'photo_2022-08-08 15.34.53.jpeg'] as $photo_name) {
-                    $send_data['photo'] = config('app.url') . '/reviews/1/' . $photo_name;
-                    $this->telegram->sendPhoto($send_data);
-                }
-                unset($send_data['photo']);
-                $send_data['video'] = config('app.url') . '/reviews/1/b79e9407dd224a7b8742f899bbcd8a0d.mov';
-                $this->telegram->sendVideo($send_data);
+                $media_files = [
+                    'photo_2022-08-08 15.34.44.jpeg' => 'photo',
+                    'photo_2022-08-08 15.34.47.jpeg' => 'photo',
+                    'photo_2022-08-08 15.34.49.jpeg' => 'photo',
+                    'photo_2022-08-08 15.34.53.jpeg' => 'photo',
+                    'b79e9407dd224a7b8742f899bbcd8a0d.mov' => 'video',
+                ];
+                $this->send_media_files($send_data, $media_files, 1);
                 $send_message = false;
                 break;
             case 'reviews 2':
@@ -364,14 +365,65 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'chat_id' => $chat_id,
                     'disable_web_page_preview' => $disable_web_page_preview,
                 ];
-                $media_files = [];
-                foreach (['photo_2022-08-08 15.44.51.jpeg', 'photo_2022-08-08 15.44.54.jpeg'] as $photo_name) {
-                    $send_data['photo'] = config('app.url') . '/reviews/1/' . $photo_name;
-                    $this->telegram->sendPhoto($send_data);
-                }
-                unset($send_data['photo']);
-                $send_data['video'] = config('app.url') . '/reviews/1/b79e9407dd224a7b8742f899bbcd8a0d.mov';
-                $this->telegram->sendVideo($send_data);
+                $media_files = [
+                    'photo_2022-08-08 15.44.51.jpeg' => 'photo',
+                    'photo_2022-08-08 15.44.54.jpeg' => 'photo',
+                    '510067915_295975166_1072048663687545_5176148860360225848_n.mp4' => 'video',
+                    '510067915_296797225_627808898513213_3549416364628311978_n.mp4' => 'video',
+                ];
+                $this->send_media_files($send_data, $media_files, 2);
+                $send_message = false;
+                break;
+            case 'reviews 3':
+                $send_data = [
+                    'chat_id' => $chat_id,
+                    'disable_web_page_preview' => $disable_web_page_preview,
+                ];
+                $media_files = [
+                    'photo_2022-08-08 15.41.37.jpeg' => 'photo',
+                    'photo_2022-08-08 15.41.40.jpeg' => 'photo',
+                    'photo_2022-08-08 15.41.43.jpeg' => 'photo',
+                    'photo_2022-08-08 15.41.47.jpeg' => 'photo',
+                    '510067915_296221184_341341454853135_7851361796163644737_n.mp4' => 'video',
+                ];
+                $this->send_media_files($send_data, $media_files, 3);
+                $send_message = false;
+                break;
+            case 'reviews 4':
+                $send_data = [
+                    'chat_id' => $chat_id,
+                    'disable_web_page_preview' => $disable_web_page_preview,
+                ];
+                $media_files = [
+                    'IMG_1223.jpg' => 'photo',
+                    'IMG_1224.jpg' => 'photo',
+                    'photo_2022-08-08 15.30.15.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.22.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.27.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.32.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.35.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.43.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.47.jpeg' => 'photo',
+                    'photo_2022-08-08 15.30.53.jpeg' => 'photo',
+                ];
+                $this->send_media_files($send_data, $media_files, 4);
+                $send_message = false;
+                break;
+            case 'reviews 5':
+                $send_data = [
+                    'chat_id' => $chat_id,
+                    'disable_web_page_preview' => $disable_web_page_preview,
+                ];
+                $media_files = [
+                    'photo_2022-08-08 15.42.41.jpeg' => 'photo',
+                    'photo_2022-08-08 15.43.08.jpeg' => 'photo',
+                    'photo_2022-08-08 15.43.11.jpeg' => 'photo',
+                    'photo_2022-08-08 15.43.18.jpeg' => 'photo',
+                    'photo_2022-08-08 15.43.21.jpeg' => 'photo',
+                    '510067915_295528928_466234748283841_1263878676191726693_n.mp4' => 'video',
+                    '510067915_296401522_734136984484264_3715331654570136976_n.mp4' => 'video',
+                ];
+                $this->send_media_files($send_data, $media_files, 5);
                 $send_message = false;
                 break;
             default:
@@ -394,6 +446,28 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
     private function send_telegram($data)
     {
         $this->telegram->sendMessage($data);
+    }
+
+    /**
+     * @param array $send_data
+     * @param array $media_files
+     * @param int $review_code
+     */
+    private function send_media_files(array $send_data, array $media_files, int $review_code) {
+
+        foreach ($media_files as $media_name => $type) {
+            $url = config('app.url') . '/reviews/' . $review_code . '/' . $media_name;
+            if ($type === 'photo') {
+                unset($send_data['video']);
+                $send_data['photo'] = $url;
+                $result = $this->telegram->sendPhoto($send_data);
+            } else {
+                unset($send_data['photo']);
+                $send_data['video'] = $url;
+                $result = $this->telegram->sendVideo($send_data);
+            }
+            info('result: ' . print_r($result, true));//fixme
+        }
     }
 
     /**
