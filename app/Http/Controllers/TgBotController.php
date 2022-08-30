@@ -234,6 +234,8 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     ->orderBy('id', 'DESC')
                     ->first();
                 $this->delete_message($tg_message->tg_bot_id, $tg_message->tg_message_id);
+                info('delete tg message id: ' . $tg_message->id);
+                $tg_message->delete();
                 $send_message = false;
                 break;
             case 'card replenishment':
