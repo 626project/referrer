@@ -359,7 +359,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.34.53.jpeg' => 'photo',
                     'b79e9407dd224a7b8742f899bbcd8a0d.mov' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 1, $message_from['id'], $action);
+                $this->send_media_files($send_data, $media_files, 1, $message['message_id'], $action);
                 $group_id = $message['message_id'];
                 break;
             case 'reviews 2':
@@ -373,7 +373,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     '510067915_295975166_1072048663687545_5176148860360225848_n.mp4' => 'video',
                     '510067915_296797225_627808898513213_3549416364628311978_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 2, $message_from['id'], $action);
+                $this->send_media_files($send_data, $media_files, 2, $message['message_id'], $action);
                 $group_id = $message['message_id'];
                 break;
             case 'reviews 3':
@@ -388,7 +388,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.41.47.jpeg' => 'photo',
                     '510067915_296221184_341341454853135_7851361796163644737_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 3, $message_from['id'], $action);
+                $this->send_media_files($send_data, $media_files, 3, $message['message_id'], $action);
                 $group_id = $message['message_id'];
                 break;
             case 'reviews 4':
@@ -408,7 +408,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'photo_2022-08-08 15.30.47.jpeg' => 'photo',
                     'photo_2022-08-08 15.30.53.jpeg' => 'photo',
                 ];
-                $this->send_media_files($send_data, $media_files, 4, $message_from['id'], $action);
+                $this->send_media_files($send_data, $media_files, 4, $message['message_id'], $action);
                 $group_id = $message['message_id'];
                 break;
             case 'reviews 5':
@@ -425,7 +425,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     '510067915_295528928_466234748283841_1263878676191726693_n.mp4' => 'video',
                     '510067915_296401522_734136984484264_3715331654570136976_n.mp4' => 'video',
                 ];
-                $this->send_media_files($send_data, $media_files, 5, $message_from['id'], $action);
+                $this->send_media_files($send_data, $media_files, 5, $message['message_id'], $action);
                 $group_id = $message['message_id'];
                 break;
             default:
@@ -439,7 +439,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         if ($send_message) {
             if ($group_id) {
                 $send_data = [
-                    'text' => '',
+                    'text' => 'Нажмите для возврата',
                     'reply_markup' => json_encode([
                         'inline_keyboard' => [
                             [
