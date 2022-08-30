@@ -45,6 +45,7 @@ class TgUserExportCollection implements FromQuery
         if ($this->end_date) {
             $tg_users_request->where('created_at', '<', $this->end_date);
         }
+        info($tg_users_request->count());
 
         return $tg_users_request->get();
     }
