@@ -230,23 +230,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                 $send_data = ['text' => 'Договор офераты пдф'];
                 break;
             case 'go back':
-                // todo удаление лишних сообщений,
-                $tg_messages = TgMessage::where([
-                    'tg_user_id' => $message_from['id'],
-                ])
-                    ->where(function($query) use ($message) {
-                        $query->where('group_id', $message['message_id'])
-                            ->orWhere('tg_message_id', $message['message_id']);
-                    })
-                    ->get();
-                info('tg_user_id: ' . $message_from['id']);//fixme
-                info('message id: ' . $message['message_id']);//fixme
-                foreach ($tg_messages as $tg_message) {
-                    info('delete tg message id: ' . $tg_message->id);
-                    $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
-                    $tg_message->delete();
-                }
-                info('after foreach');//fixme
+                $this->delete_messages($message_from['id'], $message_from['id']);
                 $send_message = false;
                 break;
             case 'card replenishment':
@@ -519,7 +503,6 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
             . 'chat_id=' . $chat_id
             . '&message_id=' . $message_id;
-        info('$api_uri: ' . $api_uri);//fixme
 
         return file_get_contents($api_uri);
     }
@@ -553,5 +536,29 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
         ]);
 
         return redirect('http://t.me/Info24PlatformBot?start=' . $referrer_link->id);
+    }
+
+    /**
+     * @param int $tg_user_id
+     * @param int $message_id
+     */
+    private function delete_messages(int $tg_user_id, int $message_id)
+    {
+        $tg_messages = TgMessage::where([
+            'tg_user_id' => $tg_user_id,
+        ])
+            ->where(function($query) use ($message_id) {
+                $query->where('group_id', $message_id)
+                    ->orWhere('tg_message_id', $message_id);
+            })
+            ->get();
+        foreach ($tg_messages as $tg_message) {
+            info('delete tg message id: ' . $tg_message->id);
+            $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
+            $tg_message->delete();
+            if ($tg_message->group_id !== $message_id) {
+                $this->delete_messages($tg_user_id, $tg_message->group_id);
+            }
+        }
     }
 }
