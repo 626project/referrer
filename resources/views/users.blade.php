@@ -21,6 +21,7 @@
                                     <th>фамилия</th>
 {{--                                    <th>телефон</th>--}}
                                     <th>действие</th>
+                                    <th>дата</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -46,6 +47,9 @@
 {{--                                        </td>--}}
                                         <td>
                                             {{$tg_user['last_action']}}
+                                        </td>
+                                        <td>
+                                            {{$tg_user['created_at']}}
                                         </td>
                                     </tr>
                                 @endforeach
