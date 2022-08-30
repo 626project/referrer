@@ -433,22 +433,22 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                     'text' => 'Команда не найдена. Повторите попытку',
                 ];
         }
+        if ($group_id) {
+            $send_data = [
+                'text' => 'Нажмите для возврата',
+                'reply_markup' => json_encode([
+                    'inline_keyboard' => [
+                        [
+                            ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
+                        ],
+                    ],
+                ]),
+            ];
+        }
         $send_data['chat_id'] = $chat_id;
         $send_data['disable_web_page_preview'] = $disable_web_page_preview;
 
         if ($send_message) {
-            if ($group_id) {
-                $send_data = [
-                    'text' => 'Нажмите для возврата',
-                    'reply_markup' => json_encode([
-                        'inline_keyboard' => [
-                            [
-                                ['text' => 'вернуться назад', 'callback_data'=>'{"action":"go back"}'],
-                            ],
-                        ],
-                    ]),
-                ];
-            }
             self::send_telegram($send_data, $action, $group_id);
         }
     }
