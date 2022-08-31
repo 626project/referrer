@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\UserService;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
@@ -14,7 +15,6 @@ class TgUserExportCollection implements FromCollection
     private $end_date;
 
     /**
-     * TgUserExportCollection constructor.
      * @param int $link_id
      * @param string|null $start_date
      * @param string|null $end_date
@@ -35,17 +35,6 @@ class TgUserExportCollection implements FromCollection
      */
     public function collection()
     {
-        $tg_users_request = TgUser::select('id', 'tg_id', 'username', 'first_name', 'last_name', 'last_action', 'created_at')
-            ->where(['link_id' => $this->link_id])
-            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
-        if ($this->start_date) {
-            $tg_users_request->where('created_at', '>=', $this->start_date);
-        }
-        if ($this->end_date) {
-            $tg_users_request->where('created_at', '<', $this->end_date);
-        }
-        info($tg_users_request->count());
-
-        return $tg_users_request->get();
+        return (new UserService)->get_tg_users($this->link_id, $this->start_date, $this->end_date);
     }
 }

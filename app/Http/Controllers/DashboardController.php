@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReferrerLink;
 use App\Models\TgUser;
 use App\Models\TgUserExportCollection;
+use App\Services\UserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
@@ -16,14 +17,20 @@ class DashboardController extends Controller
 {
     private $excel;
 
+    private $user_service;
+
     /**
-     * @return void
+     * @param Excel $excel
+     * @param UserService $user_service
      */
-    public function __construct(Excel $excel)
-    {
+    public function __construct(
+        Excel $excel,
+        UserService $user_service
+    ) {
         $this->middleware('auth');
 
         $this->excel = $excel;
+        $this->user_service = $user_service;
     }
 
     /**
@@ -92,7 +99,7 @@ class DashboardController extends Controller
     {
         $start_date = $request->get('start_date');
         $end_date = $request->get('end_date');
-        $tg_users = $this->get_tg_users($request, $link_id);
+        $tg_users = $this->user_service->get_tg_users($link_id, $start_date, $end_date);
 
         return view('users', [
             'tg_users' => $tg_users,
@@ -112,28 +119,5 @@ class DashboardController extends Controller
         $export_collection = new TgUserExportCollection($link_id, $request->get('start_date'), $request->get('end_date'));
 
         return ($export_collection)->download('result_' . date('Y-m-d') . '.xlsx');
-    }
-
-    /**
-     * @param Request $request
-     * @param int $link_id
-     * @return mixed
-     */
-    private function get_tg_users(
-        Request $request,
-        int $link_id
-    ) {
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
-        $tg_users_request = TgUser::where(['link_id' => $link_id])
-            ->whereIn('last_action', ['/start', 'variant 1', 'variant 2', 'variant 3', 'call manager', 'send a scan of your passport', 'need info about banks', 'i am ready', 'want a card', 'want a card. not resident', 'want a card. have inn', 'your question', 'participation in the action']);
-        if ($start_date) {
-            $tg_users_request->where('created_at', '>=', $start_date);
-        }
-        if ($end_date) {
-            $tg_users_request->where('created_at', '<', $end_date);
-        }
-
-        return $tg_users_request->get();
     }
 }
