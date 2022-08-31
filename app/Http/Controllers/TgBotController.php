@@ -129,6 +129,7 @@ VIP-залы ожидания Lounge Key, за каждую покупку на�
                             ],
                         ],
                     ]),
+                    'parse_mode' => 'markdown',
                 ];
                 break;
             case 'variant 1':
