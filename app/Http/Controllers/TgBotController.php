@@ -42,11 +42,13 @@ class TgBotController extends Controller
             $chat_id = $message['chat']['id'];
             $data = isset($input_data['callback_query']['data']) ? json_decode($input_data['callback_query']['data'], true) : [];
             $action = isset($data['action']) ? $data['action'] : '';
-        } else {
+        } elseif (isset($input_data['message'])) {
             $message = $input_data['message'];
             $message_from = $message['from'];
             $chat_id = $message['chat'] ['id'];
             $action = isset($message['text']) ? $message['text'] : $message['data'];
+        } else {
+            return;
         }
         $action = mb_strtolower($action);
         $disable_web_page_preview = false;
