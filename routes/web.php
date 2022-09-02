@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard', 'DashboardController@dashboard')->name('dashboard');
     Route::get('/create-link', 'DashboardController@create_link_page')->name('dashboard.link.create.page');
     Route::post('/create-link', 'DashboardController@create_link')->name('dashboard.link.create');
+    Route::get('/profile', 'ProfileController@show')->name('profile.show');
+    Route::put('/profile', 'ProfileController@edit')->name('profile.edit');
     Route::group(['prefix' => '/links/{id}'], function () {
         Route::get('', 'DashboardController@show_tg_users')->name('dashboard.link.tg.users');
         Route::get('download', 'DashboardController@download')->name('dashboard.link.tg.users.download');
