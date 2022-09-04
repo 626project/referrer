@@ -61,6 +61,10 @@ class DashboardController extends Controller
     {
         $label = $request->get('label', '');
         $link_label = $label ? $label : rand(0, 100) . time() . rand(0, 100);
+        $label_elements = ReferrerLink::where('label', $link_label)->first();
+        if ($label_elements) {
+            return redirect()->back();
+        }
         ReferrerLink::create([
             'link' => config('app.url') . '/invite/' . $link_label,
             'label' => $label,
