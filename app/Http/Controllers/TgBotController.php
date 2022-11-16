@@ -199,7 +199,7 @@ class TgBotController extends Controller
                 break;
             case 'which banks':
                 $send_data = [
-                    'text' => 'На данный момент мы работаем с тремя надежными банками, которые выдают карты работающие во всем мире (кроме России), с входящим и исходящим SWIFT, возможность работы с Apple и Google Pay,  возможность конвертации между своими счетами в приложении банка. Также мы постоянно ведем переговоры с новыми банками, чтобы у вас было больше выбора.',
+                    'text' => 'На данный момент мы работаем с двумя надежными банками, которые выдают карты работающие во всем мире (кроме России), с входящим и исходящим SWIFT, возможность работы с Apple и Google Pay,  возможность конвертации между своими счетами в приложении банка. Также мы постоянно ведем переговоры с новыми банками, чтобы у вас было больше выбора.',
                     'reply_markup' => json_encode([
                         'inline_keyboard' => [
                             [
@@ -350,7 +350,6 @@ class TgBotController extends Controller
                     'photo_2022-08-08 15.34.47.jpeg' => 'photo',
                     'photo_2022-08-08 15.34.49.jpeg' => 'photo',
                     'photo_2022-08-08 15.34.53.jpeg' => 'photo',
-                    'b79e9407dd224a7b8742f899bbcd8a0d.mov' => 'video',
                 ];
                 $this->send_media_files($send_data, $media_files, 1, $message['message_id'], $action);
                 $group_id = $message['message_id'];
@@ -411,8 +410,6 @@ class TgBotController extends Controller
                 ];
                 $media_files = [
                     'photo_2022-08-08 15.42.41.jpeg' => 'photo',
-                    'photo_2022-08-08 15.43.08.jpeg' => 'photo',
-                    'photo_2022-08-08 15.43.11.jpeg' => 'photo',
                     'photo_2022-08-08 15.43.18.jpeg' => 'photo',
                     'photo_2022-08-08 15.43.21.jpeg' => 'photo',
                     '510067915_295528928_466234748283841_1263878676191726693_n.mp4' => 'video',
