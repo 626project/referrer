@@ -6,6 +6,7 @@ use App\Http\Controllers\TgBotController;
 use App\Models\TgMessage;
 use App\Models\TgUser;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 use Telegram\Bot\Api;
 
@@ -35,12 +36,6 @@ class TgSenderCommand extends Command
         $this->telegram = new Api(TgBotController::TOKEN);
         $this->log('start');
 
-        $tg_ids = TgUser::select('tg_id')->distinct()->get();
-        foreach ($tg_ids as $tg_id) {
-            $this->log('tg_id: ' . $tg_id->tg_id);
-        }
-        $prepared_tg_id = 834585397;
-
         $send_data = [
             'text' => 'Такого у нас ещё не было…
 
@@ -58,16 +53,29 @@ class TgSenderCommand extends Command
                     ],
                 ],
             ]),
-            'chat_id' => $prepared_tg_id,
             'disable_web_page_preview' => false
         ];
-        $result = $this->telegram->sendMessage($send_data);
-        TgMessage::create([
-            'action' => 'sender',
-            'tg_message_id' => $result->getMessageId(),
-            'tg_user_id' => $result->getChat()->getId(),
-            'group_id' => $prepared_tg_id,
-        ]);
+        $success = 0;
+        $error = 0;
+        $tg_ids = TgUser::select('tg_id')->distinct()->get();
+        foreach ($tg_ids as $tg_id) {
+            $send_data['chat_id'] = $tg_id->tg_id;
+            try {
+                $result = $this->telegram->sendMessage($send_data);
+                TgMessage::create([
+                    'action' => 'sender',
+                    'tg_message_id' => $result->getMessageId(),
+                    'tg_user_id' => $result->getChat()->getId(),
+                    'group_id' => $tg_id->tg_id,
+                ]);
+                $success++;
+            } catch (Exception $exception) {
+                $this->log('error send: ' . $tg_id->tg_id);
+                $error++;
+            }
+            $this->log('success: ' . $success . ', error: ' . $error);
+        }
+
 
         $this->log('finish');
     }
