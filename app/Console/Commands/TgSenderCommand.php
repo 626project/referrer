@@ -39,7 +39,7 @@ class TgSenderCommand extends Command
         foreach ($tg_ids as $tg_id) {
             $this->log('tg_id: ' . $tg_id->tg_id);
         }
-        $prepared_tg_id = 316341641;
+        $prepared_tg_id = 834585397;
 
         $send_data = [
             'text' => 'Такого у нас ещё не было…
