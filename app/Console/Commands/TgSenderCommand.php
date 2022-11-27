@@ -35,10 +35,10 @@ class TgSenderCommand extends Command
         $this->telegram = new Api(TgBotController::TOKEN);
         $this->log('start');
 
-//        $tg_ids = TgUser::select('tg_id')->distinct()->get();
-//        foreach ($tg_ids as $tg_id) {
-//            $this->log('tg_id: ' . $tg_id->tg_id);
-//        }
+        $tg_ids = TgUser::select('tg_id')->distinct()->get();
+        foreach ($tg_ids as $tg_id) {
+            $this->log('tg_id: ' . $tg_id->tg_id);
+        }
         $prepared_tg_id = 316341641;
 
         $send_data = [
