@@ -41,6 +41,7 @@ class TgSenderClearCommand extends Command
             ->get();
         foreach ($tg_messages as $tg_message) {
             $this->log('success delete: ' . $tg_message->id);
+            $this->delete_message($tg_message->tg_user_id, $tg_message->tg_message_id);
             $deleted_count++;
         }
 
