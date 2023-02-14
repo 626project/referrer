@@ -63,24 +63,24 @@ class TgSenderCommand extends Command
         ];
         $success = 0;
         $error = 0;
-//        $tg_ids = TgUser::select('tg_id')->distinct()->get();
-//        foreach ($tg_ids as $tg_id) {
-            $send_data['chat_id'] = 316341641;
+        $tg_ids = TgUser::select('tg_id')->distinct()->get();
+        foreach ($tg_ids as $tg_id) {
+            $send_data['chat_id'] = $tg_id->tg_id;
             try {
                 $result = $this->telegram->sendMessage($send_data);
-//                TgMessage::create([
-//                    'action' => 'sender',
-//                    'tg_message_id' => $result->getMessageId(),
-//                    'tg_user_id' => $result->getChat()->getId(),
-//                    'group_id' => $tg_id->tg_id,
-//                ]);
+                TgMessage::create([
+                    'action' => 'sender',
+                    'tg_message_id' => $result->getMessageId(),
+                    'tg_user_id' => $result->getChat()->getId(),
+                    'group_id' => $tg_id->tg_id,
+                ]);
                 $success++;
             } catch (Exception $exception) {
                 $this->log('error send: ' . $tg_id->tg_id);
                 $error++;
             }
             $this->log('success: ' . $success . ', error: ' . $error);
-//        }
+        }
 
 
         $this->log('finish');
