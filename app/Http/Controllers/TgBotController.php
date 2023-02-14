@@ -46,6 +46,9 @@ class TgBotController extends Controller
             $message = $input_data['message'];
             $message_from = $message['from'];
             $chat_id = $message['chat'] ['id'];
+            if (!isset($message['text']) && !isset($message['data'])) {
+                return;
+            }
             $action = isset($message['text']) ? $message['text'] : $message['data'];
         } else {
             return;
