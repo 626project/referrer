@@ -80,6 +80,7 @@ class TgSenderCommand extends Command
                 $success++;
             } catch (Exception $exception) {
                 $this->log('error send: ' . $tg_id->tg_id);
+                $this->log('error stacktrace: ' . $exception->getTraceAsString());
                 $error++;
             }
             $this->log('success: ' . $success . ', error: ' . $error);
