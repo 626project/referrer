@@ -65,12 +65,12 @@ class TgSenderCommand extends Command
             $send_data['chat_id'] = $tg_id->tg_id;
             try {
                 $result = $this->telegram->sendMessage($send_data);
-                $send_data = [
+                $send_data_file = [
                     'document' => config('app.url') . '/files/Bankovskie_karty_raznye_strany.pdf',
                     'chat_id' => $tg_id->tg_id,
                     'disable_web_page_preview' => false,
                 ];
-                $this->telegram->sendDocument($send_data);
+                $this->telegram->sendDocument($send_data_file);
                 TgMessage::create([
                     'action' => 'sender',
                     'tg_message_id' => $result->getMessageId(),
