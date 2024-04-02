@@ -76,10 +76,10 @@ class TgSenderCommand extends Command
         ];
         $success = 0;
         $error = 0;
-//        $tg_ids = TgUser::select('tg_id')->distinct()->get();
-//        foreach ($tg_ids as $tg_id) {
-//            $send_data['chat_id'] = $tg_id->tg_id;
-            $send_data['chat_id'] = 316341641;//fixme
+        $tg_ids = TgUser::select('tg_id')->distinct()->get();
+        foreach ($tg_ids as $tg_id) {
+            $send_data['chat_id'] = $tg_id->tg_id;
+//            $send_data['chat_id'] = 316341641;//fixme
             try {
                 $result = $this->telegram->sendMessage($send_data);
 //                $send_data_file = [
@@ -92,17 +92,17 @@ class TgSenderCommand extends Command
                     'action' => 'sender',
                     'tg_message_id' => $result->getMessageId(),
                     'tg_user_id' => $result->getChat()->getId(),
-                    'group_id' => 316341641,//fixme
-                    //'group_id' => $tg_id->tg_id,
+//                    'group_id' => 316341641,//fixme
+                    'group_id' => $tg_id->tg_id,
                 ]);
                 $success++;
             } catch (Exception $exception) {
-//                $this->log('error send: ' . $tg_id->tg_id);
+                $this->log('error send: ' . $tg_id->tg_id);
                 $this->log('error stacktrace: ' . $exception->getTraceAsString());
                 $error++;
             }
             $this->log('success: ' . $success . ', error: ' . $error);
-//        }
+        }
 
 
         $this->log('finish');
