@@ -73,7 +73,7 @@ class TgSenderCommand extends Command
         $error = 0;
         $tg_ids = TgUser::select('tg_id')->distinct()->get();
         foreach ($tg_ids as $tg_id) {
-//            $send_data['chat_id'] = $tg_id->tg_id;
+            $send_data['chat_id'] = $tg_id->tg_id;
 //            $send_data['chat_id'] = 316341641;//fixme
             try {
                 $result = $this->telegram->sendMessage($send_data);
