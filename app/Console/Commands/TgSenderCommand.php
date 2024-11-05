@@ -74,7 +74,7 @@ class TgSenderCommand extends Command
         $tg_ids = TgUser::select('tg_id')->distinct()->get();
         foreach ($tg_ids as $tg_id) {
 //            $send_data['chat_id'] = $tg_id->tg_id;
-            $send_data['chat_id'] = 316341641;//fixme
+//            $send_data['chat_id'] = 316341641;//fixme
             try {
                 $result = $this->telegram->sendMessage($send_data);
 //                $send_data_file = [
