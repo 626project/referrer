@@ -168,7 +168,7 @@ Platinum: 299 $ за 2 года вперед, далее 10$ в месяц.
                                 ['text' => 'Мне подходит вариант 3', 'callback_data'=>'{"action":"variant 3"}'],
                             ],
                             [
-                                ['text' => 'Мне подходит вариант 3', 'callback_data'=>'{"action":"variant 4"}'],
+                                ['text' => 'Мне подходит вариант 4', 'callback_data'=>'{"action":"variant 4"}'],
                             ],
                             [
                                 ['text' => 'Связаться с менеджером', 'callback_data'=>'{"action":"call manager"}'],
@@ -569,6 +569,7 @@ Platinum: 299 $ за 2 года вперед, далее 10$ в месяц.
         $api_uri = 'https://api.telegram.org/bot' . self::TOKEN . '/deleteMessage?'
             . 'chat_id=' . $chat_id
             . '&message_id=' . $message_id;
+        info('$api_uri : ' . $api_uri);
 
         return file_get_contents($api_uri);
     }
