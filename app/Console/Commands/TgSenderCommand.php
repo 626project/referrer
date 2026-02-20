@@ -57,7 +57,8 @@ class TgSenderCommand extends Command
                     ],
                 ],
             ]),
-            'disable_web_page_preview' => false
+            'disable_web_page_preview' => false,
+            'parse_mode' => 'markdown',
         ];
         $success = 0;
         $error = 0;
