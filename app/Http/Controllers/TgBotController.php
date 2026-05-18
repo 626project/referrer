@@ -467,6 +467,7 @@ class TgBotController extends Controller
         string $action,
         int $group_id = 0
     ) {
+        info('$data: ' . print_r($data, 1));
         $result = $this->telegram->sendMessage($data);
 
         TgMessage::create([
